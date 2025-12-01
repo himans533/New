@@ -1,0 +1,1940 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Employee Dashboard - Project Management System</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                padding: 20px 0;
+            }
+            .dashboard-container {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+            .dashboard-header {
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 16px;
+                padding: 30px;
+                margin-bottom: 30px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            .search-container {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex: 1;
+                min-width: 250px;
+                max-width: 500px;
+            }
+            .search-container input {
+                width: 100%;
+                padding: 12px 15px;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+            }
+            .search-container input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+            .search-results {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-top: none;
+                border-radius: 0 0 8px 8px;
+                max-height: 300px;
+                overflow-y: auto;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+            .search-result-item {
+                padding: 12px 15px;
+                border-bottom: 1px solid #e2e8f0;
+                cursor: pointer;
+                transition: background 0.2s ease;
+            }
+            .search-result-item:hover {
+                background: #f7fafc;
+            }
+            .dashboard-header h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                color: #2d3748;
+                margin: 0;
+                flex: 1;
+            }
+            .header-user-info {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+            .user-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: bold;
+                font-size: 1.2rem;
+            }
+            .user-details h3 {
+                margin: 0;
+                color: #2d3748;
+                font-size: 1rem;
+            }
+            .user-details p {
+                margin: 0;
+                color: #718096;
+                font-size: 0.9rem;
+            }
+            .logout-btn {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            .logout-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                color: white;
+            }
+            .tabs-nav {
+                display: flex;
+                gap: 0;
+                margin-bottom: 30px;
+                border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+                flex-wrap: wrap;
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 12px 12px 0 0;
+                padding: 0 20px;
+            }
+            .tab-button {
+                padding: 15px 25px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                color: #718096;
+                border-bottom: 3px solid transparent;
+                transition: all 0.3s ease;
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .tab-button:hover {
+                color: #667eea;
+            }
+            .tab-button.active {
+                color: #667eea;
+                border-bottom-color: #667eea;
+            }
+            .tab-content {
+                display: none;
+                background: rgba(255, 255, 255, 0.98);
+                border-radius: 0 0 16px 16px;
+                padding: 30px;
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            }
+            .tab-content.active {
+                display: block;
+            }
+            .stat-card {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 12px;
+                padding: 25px;
+                color: white;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                transition: all 0.3s ease;
+            }
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            }
+            .stat-card h3 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin: 10px 0;
+            }
+            .stat-card p {
+                margin: 0;
+                opacity: 0.9;
+            }
+            .stat-card i {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            .content-card {
+                background: #f7fafc;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 20px;
+                border-left: 4px solid #667eea;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            }
+            .content-card h4 {
+                color: #2d3748;
+                font-weight: 600;
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .items-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .item-card {
+                background: white;
+                border-radius: 10px;
+                padding: 20px;
+                border-left: 4px solid #667eea;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 20px;
+                transition: all 0.3s ease;
+            }
+            .item-card:hover {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            }
+            .item-content {
+                flex: 1;
+            }
+            .item-content h5 {
+                color: #2d3748;
+                font-weight: 600;
+                margin: 0 0 5px 0;
+            }
+            .item-content p {
+                margin: 0 0 10px 0;
+                color: #718096;
+                font-size: 0.95rem;
+            }
+            .item-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                font-size: 0.85rem;
+                color: #718096;
+            }
+            .item-actions {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                min-width: 150px;
+            }
+            .badge {
+                display: inline-block;
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+            .badge-success {
+                background: #c6f6d5;
+                color: #22543d;
+            }
+            .badge-warning {
+                background: #feebc8;
+                color: #7c2d12;
+            }
+            .badge-danger {
+                background: #fed7d7;
+                color: #742a2a;
+            }
+            .badge-info {
+                background: #bee3f8;
+                color: #2c5282;
+            }
+            .btn {
+                padding: 8px 16px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                color: white;
+            }
+            .btn-success {
+                background: #48bb78;
+                color: white;
+            }
+            .btn-danger {
+                background: #f56565;
+                color: white;
+            }
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            .form-group {
+                margin-bottom: 20px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #2d3748;
+                font-weight: 600;
+            }
+            .form-group input,
+            .form-group textarea,
+            .form-group select {
+                width: 100%;
+                padding: 10px 15px;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                font-size: 0.95rem;
+            }
+            .form-group input:focus,
+            .form-group textarea:focus,
+            .form-group select:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+            .form-group textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                align-items: center;
+                justify-content: center;
+            }
+            .modal.active {
+                display: flex;
+            }
+            .modal-content {
+                background: white;
+                border-radius: 12px;
+                width: 90%;
+                max-width: 600px;
+                max-height: 90vh;
+                overflow-y: auto;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            }
+            .modal-header {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 25px;
+                border-radius: 12px 12px 0 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .modal-header h3 {
+                margin: 0;
+            }
+            .modal-close {
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 1.2rem;
+            }
+            .modal-body {
+                padding: 30px;
+            }
+            .modal-footer {
+                padding: 20px 30px;
+                border-top: 2px solid #e2e8f0;
+                display: flex;
+                gap: 10px;
+                justify-content: flex-end;
+            }
+            .alert {
+                padding: 15px 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                border-left: 4px solid;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .alert-success {
+                background: #c6f6d5;
+                color: #22543d;
+                border-color: #48bb78;
+            }
+            .alert-error {
+                background: #fed7d7;
+                color: #742a2a;
+                border-color: #f56565;
+            }
+            .team-members-section {
+                background: #f0f4ff;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            .team-members-section h5 {
+                color: #2d3748;
+                font-weight: 600;
+                margin-bottom: 15px;
+            }
+            .team-member-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 12px;
+                max-height: 250px;
+                overflow-y: auto;
+                padding: 10px;
+                background: white;
+                border-radius: 6px;
+            }
+            .team-member-checkbox {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                background: white;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .team-member-checkbox:hover {
+                background: #f7fafc;
+            }
+            .team-member-checkbox input[type="checkbox"] {
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .team-member-info {
+                display: flex;
+                flex-direction: column;
+            }
+            .team-member-name {
+                font-weight: 600;
+                color: #2d3748;
+                font-size: 0.9rem;
+            }
+            .team-member-email {
+                color: #718096;
+                font-size: 0.8rem;
+            }
+            .permissions-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            .permission-module {
+                background: white;
+                border-radius: 10px;
+                padding: 20px;
+                border-left: 4px solid #667eea;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            }
+            .permission-module h5 {
+                color: #2d3748;
+                font-weight: 600;
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .permission-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .permission-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+            .permission-badge.granted {
+                background: #c6f6d5;
+                color: #22543d;
+            }
+            .permission-badge.denied {
+                background: #fed7d7;
+                color: #742a2a;
+                opacity: 0.6;
+            }
+            .empty-state {
+                text-align: center;
+                padding: 40px 20px;
+                color: #718096;
+            }
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: 20px;
+                opacity: 0.5;
+            }
+            .empty-state h4 {
+                color: #2d3748;
+                margin: 20px 0 10px 0;
+            }
+            @media (max-width: 768px) {
+                .dashboard-header {
+                    flex-direction: column;
+                    text-align: center;
+                }
+                .item-card {
+                    flex-direction: column;
+                }
+                .item-actions {
+                    width: 100%;
+                }
+                .team-member-list {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <div>
+                    <h1>
+                        <i class="fas fa-chart-line"></i> Employee Dashboard
+                    </h1>
+                </div>
+                <div class="header-user-info">
+                    <div class="user-avatar" id="userInitials">ED</div>
+                    <div class="user-details">
+                        <h3 id="userName">Employee Name</h3>
+                        <p id="userRole">Employee</p>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="tabs-nav">
+                <button
+                    class="tab-button active"
+                    onclick="selectTab('overview-tab', event)"
+                >
+                    <i class="fas fa-th-large"></i> Overview
+                </button>
+                <button
+                    class="tab-button"
+                    id="projectsTabBtn"
+                    onclick="selectTab('projects-tab', event)"
+                >
+                    <i class="fas fa-project-diagram"></i> Projects
+                </button>
+                <button
+                    class="tab-button"
+                    id="tasksTabBtn"
+                    onclick="selectTab('tasks-tab', event)"
+                >
+                    <i class="fas fa-tasks"></i> Tasks
+                </button>
+                <button
+                    class="tab-button"
+                    id="milestonesTabBtn"
+                    onclick="selectTab('milestones-tab', event)"
+                >
+                    <i class="fas fa-flag"></i> Milestones
+                </button>
+                <button
+                    class="tab-button"
+                    id="documentsTabBtn"
+                    onclick="selectTab('documents-tab', event)"
+                >
+                    <i class="fas fa-file-alt"></i> Documents
+                </button>
+                <button
+                    class="tab-button"
+                    id="activitiesTabBtn"
+                    onclick="selectTab('activities-tab', event)"
+                >
+                    <i class="fas fa-history"></i> Recent Activity
+                </button>
+                <button
+                    class="tab-button"
+                    id="permissionsTabBtn"
+                    onclick="selectTab('permissions-tab', event)"
+                >
+                    <i class="fas fa-shield-alt"></i> Your Permissions
+                </button>
+            </div>
+
+            <div id="overview-tab" class="tab-content active">
+                <div class="row" style="margin-bottom: 30px">
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="stat-card">
+                            <i class="fas fa-folder"></i>
+                            <h3 id="statProjects">0</h3>
+                            <p>Total Projects</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="stat-card">
+                            <i class="fas fa-tasks"></i>
+                            <h3 id="statTasks">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="stat-card">
+                            <i class="fas fa-check-circle"></i>
+                            <h3 id="statCompleted">0</h3>
+                            <p>Completed Tasks</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="stat-card">
+                            <i class="fas fa-flag"></i>
+                            <h3 id="statMilestones">0</h3>
+                            <p>Total Milestones</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <h4><i class="fas fa-list-check"></i> Quick Actions</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                        <button
+                            class="btn btn-primary"
+                            id="quickCreateProject"
+                            onclick="openCreateProjectModal()"
+                            style="display: none"
+                        >
+                            <i class="fas fa-plus"></i> Create Project
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            id="quickCreateTask"
+                            onclick="openCreateTaskModal()"
+                            style="display: none"
+                        >
+                            <i class="fas fa-plus"></i> Create Task
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            id="quickCreateMilestone"
+                            onclick="openCreateMilestoneModal()"
+                            style="display: none"
+                        >
+                            <i class="fas fa-plus"></i> Create Milestone
+                        </button>
+                        <button
+                            class="btn btn-primary"
+                            id="quickUploadDocument"
+                            onclick="openUploadDocumentModal()"
+                            style="display: none"
+                        >
+                            <i class="fas fa-upload"></i> Upload Document
+                        </button>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <h4>
+                        <i class="fas fa-project-diagram"></i> Recent Projects
+                    </h4>
+                    <div id="recentActivity" class="items-list"></div>
+                    <div id="noActivity" class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <h4>No recent projects</h4>
+                        <p>Create your first project to get started!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="projects-tab" class="tab-content">
+                <div style="margin-bottom: 20px">
+                    <button
+                        class="btn btn-primary"
+                        id="createProjectBtn"
+                        onclick="openCreateProjectModal()"
+                        style="display: none"
+                    >
+                        <i class="fas fa-plus"></i> Create Project
+                    </button>
+                </div>
+                <div id="projectsList" class="items-list"></div>
+                <div id="noProjects" class="empty-state" style="display: none">
+                    <i class="fas fa-folder-open"></i>
+                    <h4>No projects assigned</h4>
+                    <p>You don't have any projects assigned yet.</p>
+                </div>
+            </div>
+
+            <div id="tasks-tab" class="tab-content">
+                <div style="margin-bottom: 20px">
+                    <button
+                        class="btn btn-primary"
+                        id="createTaskBtn"
+                        onclick="openCreateTaskModal()"
+                        style="display: none"
+                    >
+                        <i class="fas fa-plus"></i> Create Task
+                    </button>
+                </div>
+                <div id="tasksList" class="items-list"></div>
+                <div id="noTasks" class="empty-state" style="display: none">
+                    <i class="fas fa-tasks"></i>
+                    <h4>No tasks assigned</h4>
+                    <p>You don't have any tasks assigned yet.</p>
+                </div>
+            </div>
+
+            <div id="milestones-tab" class="tab-content">
+                <div style="margin-bottom: 20px">
+                    <button
+                        class="btn btn-primary"
+                        id="createMilestoneBtn"
+                        onclick="openCreateMilestoneModal()"
+                        style="display: none"
+                    >
+                        <i class="fas fa-plus"></i> Create Milestone
+                    </button>
+                </div>
+                <div id="milestonesList" class="items-list"></div>
+                <div
+                    id="noMilestones"
+                    class="empty-state"
+                    style="display: none"
+                >
+                    <i class="fas fa-flag"></i>
+                    <h4>No milestones</h4>
+                    <p>No milestones have been created yet.</p>
+                </div>
+            </div>
+
+            <div id="documents-tab" class="tab-content">
+                <div style="margin-bottom: 20px">
+                    <button
+                        class="btn btn-primary"
+                        id="uploadDocumentBtn"
+                        onclick="openUploadDocumentModal()"
+                        style="display: none"
+                    >
+                        <i class="fas fa-upload"></i> Upload Document
+                    </button>
+                </div>
+                <div id="documentsList" class="items-list"></div>
+                <div id="noDocuments" class="empty-state" style="display: none">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>No documents</h4>
+                    <p>No documents have been uploaded yet.</p>
+                </div>
+            </div>
+
+            <div id="activities-tab" class="tab-content">
+                <h4 style="color: #2d3748; margin-bottom: 20px">
+                    <i class="fas fa-history"></i> Recent Activities
+                </h4>
+                <div id="activitiesList" class="items-list"></div>
+                <div
+                    id="noActivities"
+                    class="empty-state"
+                    style="display: none"
+                >
+                    <i class="fas fa-history"></i>
+                    <h4>No recent activities</h4>
+                    <p>Your recent activities will appear here.</p>
+                </div>
+            </div>
+
+            <div id="permissions-tab" class="tab-content">
+                <h4 style="color: #2d3748; margin-bottom: 20px">
+                    <i class="fas fa-shield-alt"></i> Your Module Permissions
+                </h4>
+                <div id="permissionsGrid" class="permissions-grid"></div>
+                <div
+                    id="noPermissions"
+                    class="empty-state"
+                    style="display: none"
+                >
+                    <i class="fas fa-lock"></i>
+                    <h4>No permissions assigned</h4>
+                    <p>Contact your administrator to get permissions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="createProjectModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>
+                        <i class="fas fa-folder-plus"></i> Create New Project
+                    </h3>
+                    <button
+                        class="modal-close"
+                        onclick="closeModal('createProjectModal')"
+                    ></button>
+                </div>
+                <form onsubmit="createProject(event)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Project Title *</label
+                            ><input
+                                type="text"
+                                id="projectTitle"
+                                required
+                                placeholder="Enter project title"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label
+                            ><textarea
+                                id="projectDescription"
+                                placeholder="Enter project description"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Deadline</label
+                            ><input type="date" id="projectDeadline" />
+                        </div>
+                        <div class="team-members-section">
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                style="width: 100%; margin-bottom: 15px"
+                                onclick="openAddTeamMemberModal()"
+                            >
+                                <i class="fas fa-user-plus"></i> Add New Team Member
+                            </button>
+                        </div>
+                        <div class="team-members-section">
+                            <h5>
+                                <i class="fas fa-users"></i> Assign Existing
+                                Team Members
+                            </h5>
+                            <div id="teamMembersList"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn"
+                            onclick="closeModal('createProjectModal')"
+                            style="background: #e2e8f0; color: #2d3748"
+                        >
+                            Cancel</button
+                        ><button type="submit" class="btn btn-primary">
+                            Create Project
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="createTaskModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-plus-circle"></i> Create New Task</h3>
+                    <button
+                        class="modal-close"
+                        onclick="closeModal('createTaskModal')"
+                    ></button>
+                </div>
+                <form onsubmit="createTask(event)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Task Title *</label
+                            ><input
+                                type="text"
+                                id="taskTitle"
+                                required
+                                placeholder="Enter task title"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label
+                            ><textarea
+                                id="taskDescription"
+                                placeholder="Enter task description"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Project *</label
+                            ><select id="taskProject" required>
+                                <option value="">Select a project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Assign To</label
+                            ><select id="taskAssignee">
+                                <option value="">Unassigned</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label
+                            ><select id="taskPriority">
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Deadline</label
+                            ><input type="date" id="taskDeadline" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn"
+                            onclick="closeModal('createTaskModal')"
+                            style="background: #e2e8f0; color: #2d3748"
+                        >
+                            Cancel</button
+                        ><button type="submit" class="btn btn-primary">
+                            Create Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="createMilestoneModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-flag"></i> Create New Milestone</h3>
+                    <button
+                        class="modal-close"
+                        onclick="closeModal('createMilestoneModal')"
+                    ></button>
+                </div>
+                <form onsubmit="createMilestone(event)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Milestone Title *</label
+                            ><input
+                                type="text"
+                                id="milestoneTitle"
+                                required
+                                placeholder="Enter milestone title"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label
+                            ><textarea
+                                id="milestoneDescription"
+                                placeholder="Enter milestone description"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Project *</label
+                            ><select id="milestoneProject" required>
+                                <option value="">Select a project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Due Date</label
+                            ><input type="date" id="milestoneDueDate" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn"
+                            onclick="closeModal('createMilestoneModal')"
+                            style="background: #e2e8f0; color: #2d3748"
+                        >
+                            Cancel</button
+                        ><button type="submit" class="btn btn-primary">
+                            Create Milestone
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="uploadDocumentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-upload"></i> Upload Document</h3>
+                    <button
+                        class="modal-close"
+                        onclick="closeModal('uploadDocumentModal')"
+                    ></button>
+                </div>
+                <form
+                    onsubmit="uploadDocument(event)"
+                    enctype="multipart/form-data"
+                >
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Select File *</label
+                            ><input type="file" id="documentFile" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Project *</label
+                            ><select id="documentProject" required>
+                                <option value="">Select a project</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn"
+                            onclick="closeModal('uploadDocumentModal')"
+                            style="background: #e2e8f0; color: #2d3748"
+                        >
+                            Cancel</button
+                        ><button type="submit" class="btn btn-primary">
+                            Upload Document
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="addTeamMemberModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Add New Team Member</h3>
+                    <button
+                        class="modal-close"
+                        onclick="closeModal('addTeamMemberModal')"
+                    ></button>
+                </div>
+                <form onsubmit="addTeamMemberToProject(event)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Username *</label
+                            ><input
+                                type="text"
+                                id="addMemberUsername"
+                                required
+                                placeholder="Enter username"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label
+                            ><input
+                                type="email"
+                                id="addMemberEmail"
+                                required
+                                placeholder="Enter email"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Password *</label
+                            ><input
+                                type="password"
+                                id="addMemberPassword"
+                                required
+                                placeholder="Enter password (8+ chars, 2+ special chars)"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>User Type *</label
+                            ><select id="addMemberUserType" required>
+                                <option value="">Select user type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn"
+                            onclick="closeModal('addTeamMemberModal')"
+                            style="background: #e2e8f0; color: #2d3748"
+                        >
+                            Cancel</button
+                        ><button type="submit" class="btn btn-primary">
+                            Create & Add Member
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            const API_BASE = window.location.origin + "/api";
+            let currentUser = {};
+            let userPermissions = {};
+            let allEmployees = [];
+            let userRoles = [];
+            let selectedTeamMembers = [];
+            let newTeamMembers = [];
+            let projects = [];
+            let tasks = [];
+            let milestones = [];
+            let documents = [];
+
+            document.addEventListener("DOMContentLoaded", initializeDashboard);
+
+            async function initializeDashboard() {
+                const token = localStorage.getItem("employee_token");
+                const user = localStorage.getItem("employee_user");
+                if (!token || !user) {
+                    window.location.href = "/login";
+                    return;
+                }
+                try {
+                    currentUser = JSON.parse(user);
+                    userPermissions = currentUser.permissions || {};
+                    localStorage.setItem("user_id", currentUser.user_id);
+                    updateUserInfo();
+                    displayPermissions();
+                    await loadUserRoles();
+                    await loadTeamMembers();
+                    await loadDashboardData();
+                    await loadRecentActivities();
+                    updatePermissionVisibility();
+                } catch (error) {
+                    console.error(
+                        "[v0] Dashboard initialization error:",
+                        error,
+                    );
+                    window.location.href = "/login";
+                }
+            }
+
+            function updateUserInfo() {
+                document.getElementById("userName").textContent =
+                    currentUser.username || "Employee";
+                document.getElementById("userRole").textContent =
+                    currentUser.user_role || "Employee";
+                document.getElementById("userInitials").textContent = (
+                    currentUser.username || "E"
+                )
+                    .substring(0, 2)
+                    .toUpperCase();
+            }
+
+            function displayPermissions() {
+                const container = document.getElementById("permissionsGrid");
+                const modules = {
+                    Proj: "Projects",
+                    Proj_team: "Project Team",
+                    Proj_doc: "Project Documents",
+                    Proj_Dis_: "Project Discussion",
+                    task: "Tasks",
+                };
+                if (
+                    !userPermissions ||
+                    Object.keys(userPermissions).length === 0
+                ) {
+                    document.getElementById("noPermissions").style.display =
+                        "block";
+                    container.innerHTML = "";
+                    return;
+                }
+                document.getElementById("noPermissions").style.display = "none";
+                container.innerHTML = Object.entries(modules)
+                    .map(([module, label]) => {
+                        const actions = userPermissions[module] || {};
+                        return `<div class="permission-module"><h5><i class="fas fa-check-circle"></i> ${label}</h5><div class="permission-actions">${[
+                            "View",
+                            "Add",
+                            "Edit",
+                            "Delete",
+                            "Download",
+                        ]
+                            .map((action) => {
+                                const has = actions[action] || false;
+                                return `<span class="permission-badge ${has ? "granted" : "denied"}"><i class="fas fa-${has ? "check" : "times"}"></i> ${action}</span>`;
+                            })
+                            .join("")}</div></div>`;
+                    })
+                    .join("");
+            }
+
+            function updatePermissionVisibility() {
+                const canViewProjects = userPermissions["Proj"]?.["View"];
+                const canCreateProjects = userPermissions["Proj"]?.["Add"];
+                document.getElementById("projectsTabBtn").style.display =
+                    canViewProjects ? "flex" : "none";
+                document.getElementById("createProjectBtn").style.display =
+                    canCreateProjects ? "inline-flex" : "none";
+                document.getElementById("quickCreateProject").style.display =
+                    canCreateProjects ? "inline-flex" : "none";
+                const canViewTasks = userPermissions["task"]?.["View"];
+                const canCreateTasks = userPermissions["task"]?.["Add"];
+                document.getElementById("tasksTabBtn").style.display =
+                    canViewTasks ? "flex" : "none";
+                document.getElementById("createTaskBtn").style.display =
+                    canCreateTasks ? "inline-flex" : "none";
+                document.getElementById("quickCreateTask").style.display =
+                    canCreateTasks ? "inline-flex" : "none";
+                const canViewMilestones = userPermissions["Proj"]?.["View"];
+                const canCreateMilestones = userPermissions["Proj"]?.["Add"];
+                document.getElementById("milestonesTabBtn").style.display =
+                    canViewMilestones ? "flex" : "none";
+                document.getElementById("createMilestoneBtn").style.display =
+                    canCreateMilestones ? "inline-flex" : "none";
+                document.getElementById("quickCreateMilestone").style.display =
+                    canCreateMilestones ? "inline-flex" : "none";
+                const canViewDocuments = userPermissions["Proj_doc"]?.["View"];
+                const canUploadDocuments = userPermissions["Proj_doc"]?.["Add"];
+                document.getElementById("documentsTabBtn").style.display =
+                    canViewDocuments ? "flex" : "none";
+                document.getElementById("uploadDocumentBtn").style.display =
+                    canUploadDocuments ? "inline-flex" : "none";
+                document.getElementById("quickUploadDocument").style.display =
+                    canUploadDocuments ? "inline-flex" : "none";
+                document.getElementById("activitiesTabBtn").style.display =
+                    "flex";
+                document.getElementById("permissionsTabBtn").style.display =
+                    "flex";
+            }
+
+            function selectTab(tabName, event) {
+                document
+                    .querySelectorAll(".tab-content")
+                    .forEach((tab) => tab.classList.remove("active"));
+                document
+                    .querySelectorAll(".tab-button")
+                    .forEach((btn) => btn.classList.remove("active"));
+                document.getElementById(tabName).classList.add("active");
+                event.target.closest(".tab-button").classList.add("active");
+            }
+
+            async function loadUserRoles() {
+                try {
+                    const response = await fetch(`${API_BASE}/usertypes`);
+                    if (response.ok) {
+                        userRoles = await response.json();
+                    }
+                } catch (error) {
+                    console.error("[v0] Error loading user roles:", error);
+                }
+            }
+
+            async function loadTeamMembers() {
+                try {
+                    const response = await fetch(`${API_BASE}/users`);
+                    if (response.ok) {
+                        allEmployees = await response.json();
+                        renderTeamMembersList();
+                    }
+                } catch (error) {
+                    console.error("[v0] Error loading team members:", error);
+                }
+            }
+
+            function renderTeamMembersList() {
+                const container = document.getElementById("teamMembersList");
+                if (!container) return;
+                container.innerHTML = "";
+                const memberList = document.createElement("div");
+                memberList.className = "team-member-list";
+                allEmployees.forEach((emp) => {
+                    const checkboxDiv = document.createElement("div");
+                    checkboxDiv.className = "team-member-checkbox";
+                    checkboxDiv.innerHTML = `<input type="checkbox" id="member-${emp.id}" value="${emp.id}" onchange="updateTeamMemberSelection()"><div class="team-member-info"><div class="team-member-name">${emp.username}</div><div class="team-member-email">${emp.user_role || "N/A"}</div></div>`;
+                    memberList.appendChild(checkboxDiv);
+                });
+                container.appendChild(memberList);
+            }
+
+            function updateTeamMemberSelection() {
+                selectedTeamMembers = [];
+                document
+                    .querySelectorAll(
+                        '.team-member-checkbox input[type="checkbox"]:checked',
+                    )
+                    .forEach((checkbox) => {
+                        selectedTeamMembers.push(parseInt(checkbox.value));
+                    });
+            }
+
+            async function loadDashboardData() {
+                const token = localStorage.getItem("employee_token");
+                const headers = { Authorization: `Bearer ${token}` };
+                try {
+                    const [
+                        statsRes,
+                        projectsRes,
+                        tasksRes,
+                        milestonesRes,
+                        docsRes,
+                    ] = await Promise.all([
+                        fetch(`${API_BASE}/employee/dashboard/stats`, {
+                            method: "GET",
+                            headers,
+                        }),
+                        fetch(`${API_BASE}/employee/projects`, {
+                            method: "GET",
+                            headers,
+                        }),
+                        fetch(`${API_BASE}/employee/tasks`, {
+                            method: "GET",
+                            headers,
+                        }),
+                        fetch(`${API_BASE}/employee/milestones`, {
+                            method: "GET",
+                            headers,
+                        }),
+                        fetch(`${API_BASE}/employee/documents`, {
+                            method: "GET",
+                            headers,
+                        }),
+                    ]);
+                    if (statsRes.ok) {
+                        const stats = await statsRes.json();
+                        document.getElementById("statProjects").textContent =
+                            stats.total_projects || 0;
+                        document.getElementById("statTasks").textContent =
+                            stats.total_tasks || 0;
+                        document.getElementById("statCompleted").textContent =
+                            stats.completed_tasks || 0;
+                        document.getElementById("statMilestones").textContent =
+                            stats.total_milestones || 0;
+                    }
+                    if (projectsRes.ok) {
+                        projects = await projectsRes.json();
+                        renderProjects(projects);
+                        renderRecentProjects(projects);
+                        populateProjectDropdowns(projects);
+                    } else {
+                        document.getElementById("noProjects").style.display =
+                            "block";
+                    }
+                    if (tasksRes.ok) {
+                        tasks = await tasksRes.json();
+                        renderTasks(tasks);
+                    }
+                    if (milestonesRes.ok) {
+                        milestones = await milestonesRes.json();
+                        renderMilestones(milestones);
+                    }
+                    if (docsRes.ok) {
+                        documents = await docsRes.json();
+                        renderDocuments(documents);
+                    }
+                } catch (error) {
+                    console.error("[v0] Error loading dashboard data:", error);
+                    showAlert("Error loading dashboard data", "error");
+                }
+            }
+
+            async function loadRecentActivities() {
+                const token = localStorage.getItem("employee_token");
+                const headers = { Authorization: `Bearer ${token}` };
+                try {
+                    const res = await fetch(`${API_BASE}/employee/activities`, {
+                        method: "GET",
+                        headers,
+                    });
+                    if (res.ok) {
+                        const activities = await res.json();
+                        renderActivities(activities);
+                    }
+                } catch (error) {
+                    console.error("[v0] Error loading activities:", error);
+                }
+            }
+
+            function renderActivities(activities) {
+                const container = document.getElementById("activitiesList");
+                const noActivity = document.getElementById("noActivities");
+                if (!activities || activities.length === 0) {
+                    if (container) container.innerHTML = "";
+                    if (noActivity) noActivity.style.display = "block";
+                    return;
+                }
+                if (noActivity) noActivity.style.display = "none";
+                if (!container) return;
+                container.innerHTML = activities
+                    .map((activity) => {
+                        let content = `<div class="item-card"><div class="item-content"><h5><i class="fas fa-history"></i> ${activity.description}</h5><p><strong>Activity:</strong> ${activity.activity_type.replace(/_/g, " ").toUpperCase()}</p>`;
+                        if (
+                            activity.activity_type === "project_created" &&
+                            activity.project_title
+                        ) {
+                            content += `<div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;"><h6 style="color: #2d3748; margin-bottom: 10px;"><i class="fas fa-project-diagram"></i> Project Details</h6><p><strong>Title:</strong> ${activity.project_title}</p>${activity.project_description ? `<p><strong>Description:</strong> ${activity.project_description}</p>` : ""}${activity.project_deadline ? `<p><strong>Deadline:</strong> ${new Date(activity.project_deadline).toLocaleDateString()}</p>` : ""}</div>`;
+                        }
+                        content += `<div class="item-meta"><span><i class="fas fa-user"></i> ${activity.username || "Unknown"}</span><span><i class="fas fa-calendar"></i> ${new Date(activity.created_at).toLocaleDateString()}</span></div></div></div>`;
+                        return content;
+                    })
+                    .join("");
+            }
+
+            function renderProjects(projects) {
+                const container = document.getElementById("projectsList");
+                container.innerHTML = "";
+                if (projects.length === 0) {
+                    document.getElementById("noProjects").style.display =
+                        "block";
+                    return;
+                }
+                document.getElementById("noProjects").style.display = "none";
+                projects.forEach((project) => {
+                    const card = document.createElement("div");
+                    card.className = "item-card";
+                    const statusBadge =
+                        project.status === "Completed"
+                            ? "badge-success"
+                            : project.status === "In Progress"
+                              ? "badge-info"
+                              : "badge-warning";
+                    card.innerHTML = `<div class="item-content"><h5>${project.title}</h5><p>${project.description || "No description"}</p><div class="item-meta"><span><i class="fas fa-user"></i> ${project.creator_name || "Unknown"}</span><span><i class="fas fa-calendar"></i> ${new Date(project.created_at).toLocaleDateString()}</span><span class="badge ${statusBadge}">${project.status}</span></div></div>`;
+                    container.appendChild(card);
+                });
+            }
+
+            function renderRecentProjects(projects) {
+                const container = document.getElementById("recentActivity");
+                const noActivity = document.getElementById("noActivity");
+                if (projects.length === 0) {
+                    container.innerHTML = "";
+                    noActivity.style.display = "block";
+                    return;
+                }
+                noActivity.style.display = "none";
+                container.innerHTML = projects
+                    .slice(0, 3)
+                    .map(
+                        (project) =>
+                            `<div class="item-card"><div class="item-content"><h5>${project.title}</h5><p>${project.description || "No description"}</p><div class="item-meta"><span><i class="fas fa-user"></i> ${project.creator_name || "Unknown"}</span><span><i class="fas fa-calendar"></i> ${new Date(project.created_at).toLocaleDateString()}</span></div></div></div>`,
+                    )
+                    .join("");
+            }
+
+            function renderTasks(tasks) {
+                const container = document.getElementById("tasksList");
+                container.innerHTML = "";
+                if (tasks.length === 0) {
+                    document.getElementById("noTasks").style.display = "block";
+                    return;
+                }
+                document.getElementById("noTasks").style.display = "none";
+                tasks.forEach((task) => {
+                    const card = document.createElement("div");
+                    card.className = "item-card";
+                    const statusBadge =
+                        task.status === "Completed"
+                            ? "badge-success"
+                            : task.status === "In Progress"
+                              ? "badge-info"
+                              : "badge-warning";
+                    const priorityBadge =
+                        task.priority === "High"
+                            ? "badge-danger"
+                            : task.priority === "Medium"
+                              ? "badge-warning"
+                              : "badge-info";
+                    card.innerHTML = `<div class="item-content"><h5>${task.title}</h5><p>${task.description || "No description"}</p><div class="item-meta"><span><i class="fas fa-folder"></i> ${task.project_name || "No Project"}</span><span class="badge ${statusBadge}">${task.status}</span><span class="badge ${priorityBadge}">${task.priority}</span></div></div><div class="item-actions"><button class="btn btn-success btn-sm" onclick="completeTask(${task.id})" ${userPermissions["task"]?.["Edit"] ? "" : "disabled"}><i class="fas fa-check"></i> Complete</button></div>`;
+                    container.appendChild(card);
+                });
+            }
+
+            function renderMilestones(milestones) {
+                const container = document.getElementById("milestonesList");
+                container.innerHTML = "";
+                if (milestones.length === 0) {
+                    document.getElementById("noMilestones").style.display =
+                        "block";
+                    return;
+                }
+                document.getElementById("noMilestones").style.display = "none";
+                milestones.forEach((milestone) => {
+                    const card = document.createElement("div");
+                    card.className = "item-card";
+                    const statusBadge =
+                        milestone.status === "Completed"
+                            ? "badge-success"
+                            : "badge-warning";
+                    card.innerHTML = `<div class="item-content"><h5>${milestone.title}</h5><p>${milestone.description || "No description"}</p><div class="item-meta"><span><i class="fas fa-folder"></i> ${milestone.project_title || "No Project"}</span><span><i class="fas fa-calendar"></i> ${milestone.due_date ? new Date(milestone.due_date).toLocaleDateString() : "No deadline"}</span><span class="badge ${statusBadge}">${milestone.status}</span></div></div><div class="item-actions"><button class="btn btn-success btn-sm" onclick="completeMilestone(${milestone.id})" ${userPermissions["Proj"]?.["Edit"] ? "" : "disabled"}><i class="fas fa-check"></i> Complete</button></div>`;
+                    container.appendChild(card);
+                });
+            }
+
+            function renderDocuments(docs) {
+                const container = document.getElementById("documentsList");
+                container.innerHTML = "";
+                if (docs.length === 0) {
+                    document.getElementById("noDocuments").style.display =
+                        "block";
+                    return;
+                }
+                document.getElementById("noDocuments").style.display = "none";
+                docs.forEach((doc) => {
+                    const card = document.createElement("div");
+                    card.className = "item-card";
+                    card.innerHTML = `<div class="item-content"><h5><i class="fas fa-file"></i> ${doc.original_filename}</h5><div class="item-meta"><span><i class="fas fa-user"></i> ${doc.uploaded_by || "Unknown"}</span><span><i class="fas fa-calendar"></i> ${new Date(doc.uploaded_at).toLocaleDateString()}</span></div></div><div class="item-actions"><button class="btn btn-danger btn-sm" onclick="deleteDocument(${doc.id})" ${userPermissions["Proj_doc"]?.["Delete"] ? "" : "disabled"}><i class="fas fa-trash"></i> Delete</button></div>`;
+                    container.appendChild(card);
+                });
+            }
+
+            function populateProjectDropdowns(projects) {
+                const selects = [
+                    document.getElementById("taskProject"),
+                    document.getElementById("milestoneProject"),
+                    document.getElementById("documentProject"),
+                ];
+                selects.forEach((select) => {
+                    if (select) {
+                        select.innerHTML =
+                            '<option value="">Select a project</option>' +
+                            projects
+                                .map(
+                                    (p) =>
+                                        `<option value="${p.id}">${p.title}</option>`,
+                                )
+                                .join("");
+                    }
+                });
+                const assigneeSelect = document.getElementById("taskAssignee");
+                if (assigneeSelect) {
+                    assigneeSelect.innerHTML =
+                        '<option value="">Unassigned</option>' +
+                        allEmployees
+                            .map(
+                                (e) =>
+                                    `<option value="${e.id}">${e.username}</option>`,
+                            )
+                            .join("");
+                }
+            }
+
+            function closeModal(modalId) { 
+                document.getElementById(modalId).classList.remove("active"); 
+                if (modalId === "createProjectModal") {
+                    newTeamMembers = [];
+                    const display = document.getElementById("newTeamMembersDisplay");
+                    if (display) display.style.display = "none";
+                }
+            }
+            function openCreateTaskModal() { 
+                document.getElementById('createTaskModal').classList.add('active'); 
+            }
+            function openCreateMilestoneModal() { 
+                document.getElementById('createMilestoneModal').classList.add('active'); 
+            }
+            function openUploadDocumentModal() { 
+                document.getElementById('uploadDocumentModal').classList.add('active'); 
+            }
+
+            function openAddTeamMemberModal() {
+                const modal = document.getElementById('addTeamMemberModal');
+                const select = document.getElementById('addMemberUserType');
+                if (select) {
+                    select.innerHTML = '<option value="">Select user type</option>' + 
+                        userRoles.map(role => `<option value="${role.id}">${role.user_role}</option>`).join('');
+                }
+                if (modal) modal.classList.add('active');
+            }
+
+            async function addTeamMemberToProject(event) {
+                event.preventDefault();
+                const username = document.getElementById('addMemberUsername').value.trim();
+                const email = document.getElementById('addMemberEmail').value.trim();
+                const password = document.getElementById('addMemberPassword').value;
+                const userTypeId = document.getElementById('addMemberUserType').value;
+                
+                if (!username || !email || !password || !userTypeId) {
+                    showAlert('All fields are required', 'error');
+                    return;
+                }
+                
+                if (password.length < 8) {
+                    showAlert('Password must be at least 8 characters', 'error');
+                    return;
+                }
+                
+                const specialChars = (password.match(/[!@#$%^&*]/g) || []).length;
+                if (specialChars < 2) {
+                    showAlert('Password must contain at least 2 special characters', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`${API_BASE}/users`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${localStorage.getItem('employee_token')}`
+                        },
+                        body: JSON.stringify({
+                            username,
+                            email,
+                            password,
+                            user_type_id: parseInt(userTypeId)
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    if (!response.ok) {
+                        showAlert(data.error || 'Failed to create team member', 'error');
+                        return;
+                    }
+                    
+                    const newMember = data.user;
+                    selectedTeamMembers.push(newMember.id);
+                    await loadTeamMembers();
+                    showAlert('Team member created successfully!', 'success');
+                    closeModal('addTeamMemberModal');
+                    document.getElementById('addMemberUsername').value = '';
+                    document.getElementById('addMemberEmail').value = '';
+                    document.getElementById('addMemberPassword').value = '';
+                    document.getElementById('addMemberUserType').value = '';
+                } catch (error) {
+                    console.error('Error adding team member:', error);
+                    showAlert('Error creating team member', 'error');
+                }
+            }
+
+            function openCreateProjectModal() {
+                if (
+                    !userPermissions["Proj"] ||
+                    !userPermissions["Proj"]["Add"]
+                ) {
+                    showAlert(
+                        "You do not have permission to create projects",
+                        "error",
+                    );
+                    return;
+                }
+                newTeamMembers = [];
+                selectedTeamMembers = [];
+                const display = document.getElementById("newTeamMembersDisplay");
+                if (display) display.style.display = "none";
+                document
+                    .querySelectorAll(
+                        '.team-member-checkbox input[type="checkbox"]',
+                    )
+                    .forEach((checkbox) => {
+                        checkbox.checked = false;
+                    });
+                const modal = document.getElementById("createProjectModal");
+                if (modal) modal.classList.add("active");
+            }
+
+            function showAlert(message, type) {
+                const container = document.getElementById("alertContainer");
+                container.innerHTML = `<div class="alert alert-${type}">${message}<button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;">&times;</button></div>`;
+                setTimeout(() => {
+                    container.innerHTML = "";
+                }, 5000);
+            }
+
+            async function createProject(event) {
+                event.preventDefault();
+                const title = document
+                    .getElementById("projectTitle")
+                    .value.trim();
+                const description = document
+                    .getElementById("projectDescription")
+                    .value.trim();
+                const deadline =
+                    document.getElementById("projectDeadline").value;
+                if (!title) {
+                    showAlert("Project title is required", "error");
+                    return;
+                }
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/employee/projects`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                            },
+                            body: JSON.stringify({
+                                title,
+                                description,
+                                deadline: deadline || null,
+                                team_members: selectedTeamMembers,
+                            }),
+                        },
+                    );
+                    const data = await response.json();
+                    if (!response.ok) {
+                        showAlert(
+                            data.error || "Failed to create project",
+                            "error",
+                        );
+                        return;
+                    }
+                    showAlert("Project created successfully!", "success");
+                    closeModal("createProjectModal");
+                    loadDashboardData();
+                } catch (error) {
+                    showAlert("Error creating project", "error");
+                }
+            }
+
+            async function createTask(event) {
+                event.preventDefault();
+                const title = document.getElementById("taskTitle").value.trim();
+                const description = document
+                    .getElementById("taskDescription")
+                    .value.trim();
+                const projectId = document.getElementById("taskProject").value;
+                const assigneeId =
+                    document.getElementById("taskAssignee").value;
+                const priority = document.getElementById("taskPriority").value;
+                const deadline = document.getElementById("taskDeadline").value;
+                if (!title || !projectId) {
+                    showAlert("Task title and project are required", "error");
+                    return;
+                }
+                try {
+                    const response = await fetch(`${API_BASE}/employee/tasks`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                        },
+                        body: JSON.stringify({
+                            title,
+                            description,
+                            project_id: parseInt(projectId),
+                            assigned_to_id: assigneeId
+                                ? parseInt(assigneeId)
+                                : null,
+                            priority,
+                            deadline: deadline || null,
+                        }),
+                    });
+                    const data = await response.json();
+                    if (!response.ok) {
+                        showAlert(
+                            data.error || "Failed to create task",
+                            "error",
+                        );
+                        return;
+                    }
+                    showAlert("Task created successfully!", "success");
+                    closeModal("createTaskModal");
+                    loadDashboardData();
+                } catch (error) {
+                    showAlert("Error creating task", "error");
+                }
+            }
+
+            async function createMilestone(event) {
+                event.preventDefault();
+                const title = document
+                    .getElementById("milestoneTitle")
+                    .value.trim();
+                const description = document
+                    .getElementById("milestoneDescription")
+                    .value.trim();
+                const projectId =
+                    document.getElementById("milestoneProject").value;
+                const dueDate =
+                    document.getElementById("milestoneDueDate").value;
+                if (!title || !projectId) {
+                    showAlert(
+                        "Milestone title and project are required",
+                        "error",
+                    );
+                    return;
+                }
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/employee/milestones`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                            },
+                            body: JSON.stringify({
+                                title,
+                                description,
+                                project_id: parseInt(projectId),
+                                due_date: dueDate || null,
+                            }),
+                        },
+                    );
+                    const data = await response.json();
+                    if (!response.ok) {
+                        showAlert(
+                            data.error || "Failed to create milestone",
+                            "error",
+                        );
+                        return;
+                    }
+                    showAlert("Milestone created successfully!", "success");
+                    closeModal("createMilestoneModal");
+                    loadDashboardData();
+                } catch (error) {
+                    showAlert("Error creating milestone", "error");
+                }
+            }
+
+            async function uploadDocument(event) {
+                event.preventDefault();
+                const fileInput = document.getElementById("documentFile");
+                const projectId =
+                    document.getElementById("documentProject").value;
+                if (!fileInput.files[0] || !projectId) {
+                    showAlert("File and project are required", "error");
+                    return;
+                }
+                const formData = new FormData();
+                formData.append("file", fileInput.files[0]);
+                formData.append("project_id", projectId);
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/employee/documents/upload`,
+                        {
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                            },
+                            body: formData,
+                        },
+                    );
+                    const data = await response.json();
+                    if (!response.ok) {
+                        showAlert(
+                            data.error || "Failed to upload document",
+                            "error",
+                        );
+                        return;
+                    }
+                    showAlert("Document uploaded successfully!", "success");
+                    closeModal("uploadDocumentModal");
+                    loadDashboardData();
+                } catch (error) {
+                    showAlert("Error uploading document", "error");
+                }
+            }
+
+            async function completeTask(taskId) {
+                if (!confirm("Mark this task as completed?")) return;
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/employee/tasks/${taskId}/complete`,
+                        {
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                            },
+                        },
+                    );
+                    if (response.ok) {
+                        showAlert("Task completed!", "success");
+                        loadDashboardData();
+                    } else {
+                        showAlert("Failed to complete task", "error");
+                    }
+                } catch (error) {
+                    showAlert("Error completing task", "error");
+                }
+            }
+
+            async function completeMilestone(milestoneId) {
+                if (!confirm("Mark this milestone as completed?")) return;
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/employee/milestones/${milestoneId}/complete`,
+                        {
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                            },
+                        },
+                    );
+                    if (response.ok) {
+                        showAlert("Milestone completed!", "success");
+                        loadDashboardData();
+                    } else {
+                        showAlert("Failed to complete milestone", "error");
+                    }
+                } catch (error) {
+                    showAlert("Error completing milestone", "error");
+                }
+            }
+
+            async function deleteDocument(docId) {
+                if (!confirm("Are you sure you want to delete this document?"))
+                    return;
+                try {
+                    const response = await fetch(
+                        `${API_BASE}/employee/documents/${docId}/delete`,
+                        {
+                            method: "DELETE",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("employee_token")}`,
+                            },
+                        },
+                    );
+                    if (response.ok) {
+                        showAlert("Document deleted!", "success");
+                        loadDashboardData();
+                    } else {
+                        showAlert("Failed to delete document", "error");
+                    }
+                } catch (error) {
+                    showAlert("Error deleting document", "error");
+                }
+            }
+
+            function logout() {
+                localStorage.removeItem("employee_token");
+                localStorage.removeItem("employee_user");
+                localStorage.removeItem("user_id");
+                fetch(`${API_BASE}/user/logout`, { method: "POST" }).finally(
+                    () => {
+                        window.location.href = "/";
+                    },
+                );
+            }
+        </script>
+    </body>
+</html>

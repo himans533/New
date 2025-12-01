@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: #999;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            margin-bottom: -2px;
+        }
+
+        .login-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .otp-input {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .otp-input input {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .otp-input input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .otp-input input.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .resend-otp {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .resend-otp button {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .resend-otp button:hover:not(:disabled) {
+            color: #5568d3;
+        }
+
+        .resend-otp button:disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-tabs">
+            <div class="login-tab active" onclick="switchTab('admin')">
+                <i class="fas fa-shield-alt"></i> Admin Login
+            </div>
+            <div class="login-tab" onclick="switchTab('employee')">
+                <i class="fas fa-user"></i> Employee Login
+            </div>
+        </div>
+
+        <div id="adminSection" class="login-section">
+            <div id="adminStep1Container" style="display: block;">
+                <div class="login-header">
+                    <h1><i class="fas fa-shield-alt"></i> Admin Login</h1>
+                    <p>Secure access to dashboard</p>
+                </div>
+
+                <div id="adminStep1Alert" class="alert"></div>
+
+                <form id="adminStep1Form" onsubmit="handleAdminStep1(event)">
+                    <div class="form-group">
+                        <label for="adminEmail">Email Address *</label>
+                        <input type="email" id="adminEmail" placeholder="admin@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adminPassword">Password *</label>
+                        <input type="password" id="adminPassword" placeholder="Enter your password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adminConfirmPassword">Confirm Password *</label>
+                        <input type="password" id="adminConfirmPassword" placeholder="Confirm your password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adminPin">Admin PIN (6 digits) *</label>
+                        <input type="password" id="adminPin" placeholder="Enter 6-digit PIN" maxlength="6" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Proceed to OTP</button>
+                    </div>
+
+                    <div class="loading" id="adminStep1Loading">
+                        <div class="spinner"></div>Verifying credentials...
+                    </div>
+                </form>
+            </div>
+
+            <div id="adminStep2Container" style="display: none;">
+                <div class="login-header">
+                    <h1><i class="fas fa-lock"></i> Verify OTP</h1>
+                    <p>Enter the OTP sent to your email</p>
+                </div>
+
+                <div id="adminStep2Alert" class="alert"></div>
+
+                <form id="adminStep2Form" onsubmit="handleAdminStep2(event)">
+                    <div class="info-text">
+                        An OTP has been sent to your registered email. Enter it below to complete login.
+                    </div>
+
+                    <div class="otp-input" id="adminOtpInputContainer">
+                        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" required>
+                        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" required>
+                        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" required>
+                        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" required>
+                        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" required>
+                        <input type="text" maxlength="1" class="otp-digit" inputmode="numeric" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="goBackToAdminStep1()">Back</button>
+                        <button type="submit" class="btn-primary">Verify & Login</button>
+                    </div>
+
+                    <div class="resend-otp">
+                        <button type="button" id="adminResendBtn" onclick="resendAdminOtp()">Resend OTP</button>
+                        <span id="adminResendTimer"></span>
+                    </div>
+
+                    <div class="loading" id="adminStep2Loading">
+                        <div class="spinner"></div>Verifying OTP...
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="employeeSection" class="login-section hidden">
+            <div class="login-header">
+                <h1><i class="fas fa-user"></i> Employee Login</h1>
+                <p>Access your dashboard</p>
+            </div>
+
+            <div id="employeeAlert" class="alert"></div>
+
+            <form id="employeeForm" onsubmit="handleEmployeeLogin(event)">
+                <div class="form-group">
+                    <label for="employeeEmail">Email Address *</label>
+                    <input type="email" id="employeeEmail" placeholder="employee@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="employeePassword">Password *</label>
+                    <input type="password" id="employeePassword" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Login</button>
+                </div>
+
+                <div class="loading" id="employeeLoading">
+                    <div class="spinner"></div>Logging in...
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/api';
+        let adminId = null;
+        let adminResendTimer = 0;
+
+        function switchTab(tab) {
+            const adminSection = document.getElementById('adminSection');
+            const employeeSection = document.getElementById('employeeSection');
+            const tabs = document.querySelectorAll('.login-tab');
+
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.closest('.login-tab').classList.add('active');
+
+            if (tab === 'admin') {
+                adminSection.classList.remove('hidden');
+                employeeSection.classList.add('hidden');
+            } else {
+                adminSection.classList.add('hidden');
+                employeeSection.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupOtpInputs('adminOtpInputContainer');
+        });
+
+        function setupOtpInputs(containerId) {
+            const container = document.getElementById(containerId);
+            const otpInputs = container.querySelectorAll('.otp-digit');
+            
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function(e) {
+                    if (this.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+            });
+        }
+
+        function showAlert(containerId, message, type) {
+            const alert = document.getElementById(containerId);
+            alert.className = `alert show ${type === 'danger' ? 'alert-danger' : 'alert-success'}`;
+            alert.innerHTML = message;
+        }
+
+        function clearAlert(containerId) {
+            const alert = document.getElementById(containerId);
+            alert.className = 'alert';
+            alert.innerHTML = '';
+        }
+
+        async function handleAdminStep1(event) {
+            event.preventDefault();
+            clearAlert('adminStep1Alert');
+
+            const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+            const password = document.getElementById('adminPassword').value;
+            const confirmPassword = document.getElementById('adminConfirmPassword').value;
+            const adminPin = document.getElementById('adminPin').value.trim();
+
+            if (!email || !password || !confirmPassword || !adminPin) {
+                showAlert('adminStep1Alert', 'All fields are required.', 'danger');
+                return;
+            }
+
+            try {
+                document.getElementById('adminStep1Loading').classList.add('show');
+
+                const response = await fetch(`${API_BASE}/admin/login/step1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        confirm_password: confirmPassword,
+                        admin_pin: adminPin
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById('adminStep1Loading').classList.remove('show');
+
+                if (!response.ok) {
+                    showAlert('adminStep1Alert', data.error || 'Authentication failed', 'danger');
+                    return;
+                }
+
+                adminId = data.admin_id;
+                showAlert('adminStep1Alert', 'OTP sent successfully! Check your email.', 'success');
+                
+                setTimeout(() => {
+                    document.getElementById('adminStep1Container').style.display = 'none';
+                    document.getElementById('adminStep2Container').style.display = 'block';
+                    startAdminResendTimer();
+                }, 1500);
+
+            } catch (error) {
+                console.error('[v0] Admin Step1 Error:', error);
+                document.getElementById('adminStep1Loading').classList.remove('show');
+                showAlert('adminStep1Alert', 'Network error. Please try again.', 'danger');
+            }
+        }
+
+        async function handleAdminStep2(event) {
+            event.preventDefault();
+            clearAlert('adminStep2Alert');
+
+            const container = document.getElementById('adminOtpInputContainer');
+            const otpInputs = container.querySelectorAll('.otp-digit');
+            const otp = Array.from(otpInputs).map(input => input.value).join('');
+
+            if (otp.length !== 6) {
+                showAlert('adminStep2Alert', 'Please enter all 6 digits of the OTP.', 'danger');
+                otpInputs.forEach(input => input.classList.add('error'));
+                return;
+            }
+
+            try {
+                document.getElementById('adminStep2Loading').classList.add('show');
+
+                const response = await fetch(`${API_BASE}/admin/login/step2`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ admin_id: adminId, otp })
+                });
+
+                const data = await response.json();
+                document.getElementById('adminStep2Loading').classList.remove('show');
+
+                if (!response.ok) {
+                    showAlert('adminStep2Alert', data.error || 'OTP verification failed', 'danger');
+                    otpInputs.forEach(input => input.classList.add('error'));
+                    return;
+                }
+
+                showAlert('adminStep2Alert', 'Login successful! Redirecting...', 'success');
+                localStorage.setItem('admin_session_token', data.session_token);
+                localStorage.setItem('admin_name', data.admin_name);
+                localStorage.setItem('userRole', 'admin');
+
+                setTimeout(() => {
+                    window.location.href = '/admin-dashboard';
+                }, 1500);
+
+            } catch (error) {
+                console.error('[v0] Admin Step2 Error:', error);
+                document.getElementById('adminStep2Loading').classList.remove('show');
+                showAlert('adminStep2Alert', 'Network error. Please try again.', 'danger');
+            }
+        }
+
+        async function handleEmployeeLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('employeeEmail').value.trim().toLowerCase();
+            const password = document.getElementById('employeePassword').value;
+
+            if (!email || !password) {
+                showAlert('employeeAlert', 'Email and password are required.', 'danger');
+                return;
+            }
+
+            try {
+                document.getElementById('employeeLoading').classList.add('show');
+
+                const response = await fetch(`${API_BASE}/user/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                document.getElementById('employeeLoading').classList.remove('show');
+
+                if (!response.ok) {
+                    showAlert('employeeAlert', data.error || 'Login failed', 'danger');
+                    return;
+                }
+
+                showAlert('employeeAlert', 'Login successful! Redirecting...', 'success');
+
+                localStorage.setItem('employee_token', 'session');
+                localStorage.setItem('employee_user', JSON.stringify({
+                    user_id: data.user_id,
+                    username: data.username,
+                    email: data.email,
+                    user_role: data.user_role || 'Employee',
+                    permissions: data.permissions || {}
+                }));
+
+                setTimeout(() => {
+                    window.location.href = '/employee-dashboard';
+                }, 1500);
+
+            } catch (error) {
+                console.error('[v0] Employee Login Error:', error);
+                document.getElementById('employeeLoading').classList.remove('show');
+                showAlert('employeeAlert', 'Network error. Please try again.', 'danger');
+            }
+        }
+
+        function goBackToAdminStep1() {
+            document.getElementById('adminStep2Container').style.display = 'none';
+            document.getElementById('adminStep1Container').style.display = 'block';
+            clearAlert('adminStep2Alert');
+            
+            const otpInputs = document.querySelectorAll('#adminOtpInputContainer .otp-digit');
+            otpInputs.forEach(input => {
+                input.value = '';
+                input.classList.remove('error');
+            });
+        }
+
+        function startAdminResendTimer() {
+            adminResendTimer = 60;
+            const btn = document.getElementById('adminResendBtn');
+            const timer = document.getElementById('adminResendTimer');
+            
+            btn.disabled = true;
+            
+            const interval = setInterval(() => {
+                adminResendTimer--;
+                timer.textContent = `(${adminResendTimer}s)`;
+                
+                if (adminResendTimer <= 0) {
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    timer.textContent = '';
+                }
+            }, 1000);
+        }
+
+        async function resendAdminOtp() {
+            const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+            const password = document.getElementById('adminPassword').value;
+            const confirmPassword = document.getElementById('adminConfirmPassword').value;
+            const adminPin = document.getElementById('adminPin').value.trim();
+
+            try {
+                const response = await fetch(`${API_BASE}/admin/login/step1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        confirm_password: confirmPassword,
+                        admin_pin: adminPin
+                    })
+                });
+
+                if (response.ok) {
+                    showAlert('adminStep2Alert', 'OTP resent successfully!', 'success');
+                    startAdminResendTimer();
+                }
+            } catch (error) {
+                showAlert('adminStep2Alert', 'Failed to resend OTP.', 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

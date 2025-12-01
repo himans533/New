@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SLRD System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 24px 30px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(10px);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .admin-info {
+            text-align: right;
+        }
+
+        .admin-name {
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .admin-role {
+            color: #718096;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .action-card p {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-card p {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .stat-card.primary {
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .stat-card.warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .stat-card.danger {
+            border-left: 4px solid #dc3545;
+        }
+
+        .stat-card.info {
+            border-left: 4px solid #17a2b8;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #718096;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .table thead {
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table th {
+            color: #2d3748;
+            font-weight: 700;
+            padding: 15px;
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 95%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #667eea;
+        }
+
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .close:hover {
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .projects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .project-item h4 {
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .project-item p {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .progress {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .deadlines-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .deadline-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .deadline-item:hover {
+            background: #f7fafc;
+            transform: translateX(3px);
+        }
+
+        .deadline-item h5 {
+            margin: 0 0 5px 0;
+            color: #2d3748;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .project-detail-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .project-detail-card h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .project-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-item i {
+            color: #667eea;
+            width: 20px;
+        }
+
+        .info-item .label {
+            color: #718096;
+            font-weight: 600;
+            min-width: 100px;
+        }
+
+        .info-item .value {
+            color: #2d3748;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .progress-container {
+            margin-top: 15px;
+        }
+
+        .progress-container p {
+            margin: 0 0 5px 0;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-left {
+                flex: 1 1 100%;
+            }
+
+            .header-right {
+                flex: 1 1 100%;
+                justify-content: center;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+
+            .tabs-nav {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                border-bottom: none;
+                border-left: 3px solid transparent;
+                text-align: left;
+            }
+
+            .tab-button.active {
+                border-bottom: none;
+                border-left-color: #667eea;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+            </div>
+            <div class="search-container">
+                <i class="fas fa-search" style="color: #718096;"></i>
+                <input type="text" id="adminSearchInput" placeholder="Search projects, tasks, team members..."
+                    onkeyup="performAdminSearch(event)">
+            </div>
+            <div class="header-right">
+                <div class="admin-info">
+                    <div class="admin-name" id="adminName">Super Admin</div>
+                    <div class="admin-role">Administrator</div>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div id="successMessage" class="success-message"></div>
+
+        <div class="action-buttons">
+            <div class="action-card">
+                <h3><i class="fas fa-chart-line"></i> Dashboard Overview</h3>
+                <p>View project statistics and task analytics</p>
+                <button class="btn btn-primary" onclick="selectTab('overview-tab')">View Dashboard</button>
+            </div>
+            <div class="action-card">
+                <h3><i class="fas fa-users-cog"></i> Manage User Types</h3>
+                <p>Create and manage employee roles</p>
+                <button class="btn btn-primary" onclick="selectTab('usertypes-tab')">Manage Types</button>
+            </div>
+            <div class="action-card">
+                <h3><i class="fas fa-user-plus"></i> Create Employee</h3>
+                <p>Add new employees to the system</p>
+                <button class="btn btn-primary" onclick="openUserModal()">Create Employee</button>
+            </div>
+            <div class="action-card">
+                <h3><i class="fas fa-list-check"></i> View Employees</h3>
+                <p>Manage all system employees</p>
+                <button class="btn btn-primary" onclick="selectTab('users-tab')">View Employees</button>
+            </div>
+        </div>
+
+        <div
+            style="background: rgba(255, 255, 255, 0.98); border-radius: 16px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); padding: 30px;">
+            <div class="tabs-nav">
+                <button class="tab-button active" onclick="selectTab('overview-tab')">Dashboard Overview</button>
+                <button class="tab-button" onclick="selectTab('usertypes-tab')">User Types</button>
+                <button class="tab-button" onclick="selectTab('users-tab')">Employees</button>
+            </div>
+
+            <div id="overview-tab" class="tab-content active">
+                <div class="dashboard-stats">
+                    <div class="stat-card primary" onclick="showDetailModal('active_projects')">
+                        <div style="text-align: center; font-size: 24px; color: #667eea;"><i class="fas fa-folder"></i>
+                        </div>
+                        <h3 id="activeProjectsCount">0</h3>
+                        <p>Active Projects</p>
+                    </div>
+                    <div class="stat-card success" onclick="showDetailModal('completed_tasks')">
+                        <div style="text-align: center; font-size: 24px; color: #28a745;"><i
+                                class="fas fa-check-circle"></i></div>
+                        <h3 id="completedTasksCount">0</h3>
+                        <p>Completed Tasks</p>
+                    </div>
+                    <div class="stat-card warning" onclick="showDetailModal('active_tasks')">
+                        <div style="text-align: center; font-size: 24px; color: #ffc107;"><i class="fas fa-clock"></i>
+                        </div>
+                        <h3 id="activeTasksCount">0</h3>
+                        <p>Active Tasks</p>
+                    </div>
+                    <div class="stat-card danger" onclick="showDetailModal('overdue_tasks')">
+                        <div style="text-align: center; font-size: 24px; color: #dc3545;"><i
+                                class="fas fa-exclamation-triangle"></i></div>
+                        <h3 id="overdueTasksCount">0</h3>
+                        <p>Overdue Tasks</p>
+                    </div>
+                    <div class="stat-card info" onclick="showDetailModal('pending_approvals')">
+                        <div style="text-align: center; font-size: 24px; color: #17a2b8;"><i
+                                class="fas fa-clipboard-check"></i></div>
+                        <h3 id="pendingApprovalsCount">0</h3>
+                        <p>Pending Approvals</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-top: 25px;">
+                    <div
+                        style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                        <h3 style="color: #667eea; margin-bottom: 20px;"><i class="fas fa-folder"></i> Recent Projects
+                        </h3>
+                        <div class="projects-list" id="projectsList"></div>
+                        <div id="noProjects" class="no-data">No projects available yet</div>
+                    </div>
+
+                    <div
+                        style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                        <h3 style="color: #667eea; margin-bottom: 20px;"><i class="fas fa-calendar"></i> Upcoming
+                            Deadlines</h3>
+                        <div class="deadlines-list" id="deadlinesList"></div>
+                        <div id="noDeadlines" class="no-data">No upcoming deadlines</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="usertypes-tab" class="tab-content">
+                <div style="margin-bottom: 20px;">
+                    <button class="btn btn-primary" onclick="openUserTypeModal()">+ Create User Type</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User Role</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usertypesList"></tbody>
+                </table>
+                <div id="noUserTypes" class="no-data">No user types available</div>
+            </div>
+
+            <div id="users-tab" class="tab-content">
+                <div style="margin-bottom: 20px;">
+                    <button class="btn btn-primary" onclick="openUserModal()">+ Create Employee</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>User Type</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersList"></tbody>
+                </table>
+                <div id="noUsers" class="no-data">No employees available</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="userTypeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create User Type</h3>
+                <span class="close" onclick="closeUserTypeModal()">&times;</span>
+            </div>
+            <form onsubmit="createUserType(event)">
+                <div id="usertypeError"></div>
+                <div class="form-group">
+                    <label for="typRole">User Role Name *</label>
+                    <input type="text" id="typRole" required placeholder="e.g., Manager, Supervisor">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeUserTypeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="updateUserTypeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update User Type</h3>
+                <span class="close" onclick="closeUpdateUserTypeModal()">&times;</span>
+            </div>
+            <form onsubmit="updateUserType(event)">
+                <input type="hidden" id="updateTypId">
+                <div class="form-group">
+                    <label for="updateTypRole">User Role Name *</label>
+                    <input type="text" id="updateTypRole" required placeholder="e.g., Manager, Supervisor">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeUpdateUserTypeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal">
+        <div class="modal-content" style="width: 700px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3>Create New Employee</h3>
+                <span class="close" onclick="closeUserModal()">&times;</span>
+            </div>
+            <form onsubmit="createUser(event)">
+                <div class="modal-body">
+                    <div id="userError"></div>
+                    <div class="form-group">
+                        <label for="usrUsername">Username *</label>
+                        <input type="text" id="usrUsername" required placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="usrEmail">Email Address *</label>
+                        <input type="email" id="usrEmail" required placeholder="employee@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="usrPassword">Password *</label>
+                        <input type="password" id="usrPassword" required
+                            placeholder="Min 8 characters, 2 special chars">
+                    </div>
+                    <div class="form-group">
+                        <label for="usrConfirmPassword">Confirm Password *</label>
+                        <input type="password" id="usrConfirmPassword" required placeholder="Confirm password">
+                    </div>
+                    <div class="form-group">
+                        <label for="usrUserType">User Type *</label>
+                        <select id="usrUserType" required>
+                            <option value="">Select a user type</option>
+                        </select>
+                    </div>
+
+                    <h4 style="margin-top: 20px; margin-bottom: 15px; color: #667eea;">Module Permissions</h4>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-folder"></i> Projects</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="permProjView" data-module="Proj"
+                                        data-action="View"><label for="permProjView" style="margin: 0;">View</label>
+                                </div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjAdd" data-module="Proj"
+                                        data-action="Add"><label for="permProjAdd" style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjEdit" data-module="Proj"
+                                        data-action="Edit"><label for="permProjEdit" style="margin: 0;">Edit</label>
+                                </div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDelete" data-module="Proj"
+                                        data-action="Delete"><label for="permProjDelete"
+                                        style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-users"></i> Project Team</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="permProjTeamView"
+                                        data-module="Proj_team" data-action="View"><label for="permProjTeamView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjTeamAdd"
+                                        data-module="Proj_team" data-action="Add"><label for="permProjTeamAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjTeamEdit"
+                                        data-module="Proj_team" data-action="Edit"><label for="permProjTeamEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjTeamDelete"
+                                        data-module="Proj_team" data-action="Delete"><label for="permProjTeamDelete"
+                                        style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-file-alt"></i> Documents</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDocView"
+                                        data-module="Proj_doc" data-action="View"><label for="permProjDocView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDocAdd"
+                                        data-module="Proj_doc" data-action="Add"><label for="permProjDocAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDocEdit"
+                                        data-module="Proj_doc" data-action="Edit"><label for="permProjDocEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDocDelete"
+                                        data-module="Proj_doc" data-action="Delete"><label for="permProjDocDelete"
+                                        style="margin: 0;">Delete</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDocDownload"
+                                        data-module="Proj_doc" data-action="Download"><label for="permProjDocDownload"
+                                        style="margin: 0;">Download</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-comments"></i> Discussion</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDisView"
+                                        data-module="Proj_Dis_" data-action="View"><label for="permProjDisView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDisAdd"
+                                        data-module="Proj_Dis_" data-action="Add"><label for="permProjDisAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDisEdit"
+                                        data-module="Proj_Dis_" data-action="Edit"><label for="permProjDisEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permProjDisDelete"
+                                        data-module="Proj_Dis_" data-action="Delete"><label for="permProjDisDelete"
+                                        style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-tasks"></i> Tasks</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="permTaskView" data-module="task"
+                                        data-action="View"><label for="permTaskView" style="margin: 0;">View</label>
+                                </div>
+                                <div class="checkbox-item"><input type="checkbox" id="permTaskAdd" data-module="task"
+                                        data-action="Add"><label for="permTaskAdd" style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="permTaskEdit" data-module="task"
+                                        data-action="Edit"><label for="permTaskEdit" style="margin: 0;">Edit</label>
+                                </div>
+                                <div class="checkbox-item"><input type="checkbox" id="permTaskDelete" data-module="task"
+                                        data-action="Delete"><label for="permTaskDelete"
+                                        style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Employee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content" style="width: 600px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3 id="detailModalTitle">Active Projects</h3>
+                <span class="close" onclick="closeDetailModal()">&times;</span>
+            </div>
+            <div id="detailModalBody" style="padding: 20px;"></div>
+        </div>
+    </div>
+
+    <div id="updateUserModal" class="modal">
+        <div class="modal-content" style="width: 700px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3>Update Employee</h3>
+                <span class="close" onclick="closeUpdateUserModal()">&times;</span>
+            </div>
+            <form onsubmit="updateUser(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="updateUsrId">
+                    <div id="updateUserError"></div>
+                    <div class="form-group">
+                        <label for="updateUsrUsername">Username *</label>
+                        <input type="text" id="updateUsrUsername" required placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateUsrEmail">Email Address *</label>
+                        <input type="email" id="updateUsrEmail" required placeholder="employee@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateUsrPassword">New Password (leave blank to keep current)</label>
+                        <input type="password" id="updateUsrPassword" placeholder="Min 8 characters, 2 special chars">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateUsrUserType">User Type *</label>
+                        <select id="updateUsrUserType" required>
+                            <option value="">Select a user type</option>
+                        </select>
+                    </div>
+
+                    <h4 style="margin-top: 20px; margin-bottom: 15px; color: #667eea;">Module Permissions</h4>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-folder"></i> Projects</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjView"
+                                        data-module="Proj" data-action="View"><label for="updatePermProjView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjAdd"
+                                        data-module="Proj" data-action="Add"><label for="updatePermProjAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjEdit"
+                                        data-module="Proj" data-action="Edit"><label for="updatePermProjEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDelete"
+                                        data-module="Proj" data-action="Delete"><label for="updatePermProjDelete"
+                                        style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-users"></i> Project Team</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjTeamView"
+                                        data-module="Proj_team" data-action="View"><label for="updatePermProjTeamView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjTeamAdd"
+                                        data-module="Proj_team" data-action="Add"><label for="updatePermProjTeamAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjTeamEdit"
+                                        data-module="Proj_team" data-action="Edit"><label for="updatePermProjTeamEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjTeamDelete"
+                                        data-module="Proj_team" data-action="Delete"><label
+                                        for="updatePermProjTeamDelete" style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-file-alt"></i> Documents</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDocView"
+                                        data-module="Proj_doc" data-action="View"><label for="updatePermProjDocView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDocAdd"
+                                        data-module="Proj_doc" data-action="Add"><label for="updatePermProjDocAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDocEdit"
+                                        data-module="Proj_doc" data-action="Edit"><label for="updatePermProjDocEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDocDelete"
+                                        data-module="Proj_doc" data-action="Delete"><label for="updatePermProjDocDelete"
+                                        style="margin: 0;">Delete</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDocDownload"
+                                        data-module="Proj_doc" data-action="Download"><label
+                                        for="updatePermProjDocDownload" style="margin: 0;">Download</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-comments"></i> Discussion</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDisView"
+                                        data-module="Proj_Dis_" data-action="View"><label for="updatePermProjDisView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDisAdd"
+                                        data-module="Proj_Dis_" data-action="Add"><label for="updatePermProjDisAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDisEdit"
+                                        data-module="Proj_Dis_" data-action="Edit"><label for="updatePermProjDisEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermProjDisDelete"
+                                        data-module="Proj_Dis_" data-action="Delete"><label
+                                        for="updatePermProjDisDelete" style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 0; padding-bottom: 0;">
+                            <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;"><i
+                                    class="fas fa-tasks"></i> Tasks</div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermTaskView"
+                                        data-module="task" data-action="View"><label for="updatePermTaskView"
+                                        style="margin: 0;">View</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermTaskAdd"
+                                        data-module="task" data-action="Add"><label for="updatePermTaskAdd"
+                                        style="margin: 0;">Add</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermTaskEdit"
+                                        data-module="task" data-action="Edit"><label for="updatePermTaskEdit"
+                                        style="margin: 0;">Edit</label></div>
+                                <div class="checkbox-item"><input type="checkbox" id="updatePermTaskDelete"
+                                        data-module="task" data-action="Delete"><label for="updatePermTaskDelete"
+                                        style="margin: 0;">Delete</label></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeUpdateUserModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Employee</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="taskDetailModal" class="modal">
+        <div class="modal-content" style="width: 700px; max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3 id="modalTitle">Task Details</h3>
+                <span class="close" onclick="hideTaskModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="hideTaskModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = window.location.origin + '/api';
+
+        window.addEventListener('DOMContentLoaded', function () { loadPageData(); });
+
+        function selectTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            const tab = document.getElementById(tabName);
+            if (tab) {
+                tab.classList.add('active');
+                event.target.classList.add('active');
+                if (tabName === 'overview-tab') loadDashboardOverview();
+                else if (tabName === 'users-tab') loadUsers();
+                else if (tabName === 'usertypes-tab') loadUserTypes();
+            }
+        }
+
+        function loadPageData() {
+            const token = localStorage.getItem('admin_session_token');
+            if (!token) { window.location.href = '/'; return; }
+            const adminName = localStorage.getItem('admin_name') || 'Super Admin';
+            document.getElementById('adminName').textContent = adminName;
+            loadUserTypes();
+            loadUsers();
+            loadDashboardOverview();
+        }
+
+        async function loadDashboardOverview() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/dashboard/stats`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` } });
+                if (!response.ok) { console.error('Failed to load dashboard stats'); return; }
+                const stats = await response.json();
+                document.getElementById('activeProjectsCount').textContent = stats.active_projects || 0;
+                document.getElementById('completedTasksCount').textContent = stats.completed_tasks || 0;
+                document.getElementById('activeTasksCount').textContent = stats.active_tasks || 0;
+                document.getElementById('overdueTasksCount').textContent = stats.overdue_tasks || 0;
+                document.getElementById('pendingApprovalsCount').textContent = stats.pending_approvals || 0;
+
+                const projectsResponse = await fetch(`${API_BASE}/admin/projects`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` } });
+                if (projectsResponse.ok) {
+                    const projects = await projectsResponse.json();
+                    const projectsList = document.getElementById('projectsList');
+                    if (projects.length === 0) { projectsList.innerHTML = '<p style="color: #718096;">No projects created yet</p>'; }
+                    else { projectsList.innerHTML = projects.slice(0, 5).map(project => `<div class="project-item"><h4>${project.title}</h4><p>${project.description || 'No description'} - ${project.progress || 0}% Complete</p><div class="progress"><div class="progress-bar" style="width: ${project.progress || 0}%"></div></div><p style="font-size: 12px; color: #718096;">Created by: ${project.creator_name || 'N/A'} | Team: ${project.team_count} members | Tasks: ${project.task_count}</p></div>`).join(''); }
+                }
+
+                const tasksResponse = await fetch(`${API_BASE}/admin/tasks`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` } });
+                if (tasksResponse.ok) {
+                    const tasks = await tasksResponse.json();
+                    const deadlinesList = document.getElementById('deadlinesList');
+                    if (tasks.length === 0) { deadlinesList.innerHTML = '<p style="color: #718096;">No tasks created yet</p>'; }
+                    else {
+                        deadlinesList.innerHTML = tasks.slice(0, 5).map(task => {
+                            const dueDate = new Date(task.deadline);
+                            const today = new Date();
+                            const diffTime = dueDate - today;
+                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                            let dueDateStr = 'No deadline';
+                            if (diffDays < 0) dueDateStr = 'Overdue';
+                            else if (diffDays === 0) dueDateStr = 'Today';
+                            else if (diffDays === 1) dueDateStr = 'Tomorrow';
+                            else dueDateStr = `${diffDays} days`;
+                            const priorityColor = { 'High': '#ffc107', 'Medium': '#28a745', 'Low': '#6c757d' };
+                            const statusColor = { 'Overdue': '#dc3545', 'In Progress': '#ffc107', 'Completed': '#28a745' };
+                            return `<div class="deadline-item" onclick="alert('Task: ${task.title}\\nStatus: ${task.status}\\nAssigned to: ${task.assigned_to_name || 'Unassigned'}')"><h5>${task.title}</h5><p style="margin: 0; font-size: 12px; color: #718096;">Due: ${dueDateStr}</p><p style="margin: 5px 0 0 0; font-size: 11px;"><span style="background: ${priorityColor[task.priority] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 3px;">${task.priority} Priority</span><span style="background: ${statusColor[task.status] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 3px; margin-left: 5px;">${task.status}</span></p></div>`;
+                        }).join('');
+                    }
+                }
+            } catch (error) { console.error('[v0] Error loading dashboard:', error); }
+        }
+
+        function showDetailModal(type) { const modal = document.getElementById('taskDetailModal'); const modalTitle = document.getElementById('modalTitle'); const modalBody = document.getElementById('modalBody'); const titles = { 'active_projects': 'Active Projects', 'completed_tasks': 'Completed Tasks', 'active_tasks': 'Active Tasks', 'overdue_tasks': 'Overdue Tasks', 'pending_approvals': 'Pending Approvals' }; modalTitle.textContent = titles[type] || 'Details'; modalBody.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</div>'; modal.style.display = 'block'; setTimeout(() => { modalBody.innerHTML = '<div class="text-center text-muted"><p>Data will be loaded from database</p></div>'; }, 300); }
+        function hideTaskModal() { document.getElementById('taskDetailModal').style.display = 'none'; }
+        window.onclick = function (event) { document.querySelectorAll('.modal').forEach(modal => { if (event.target === modal) modal.style.display = 'none'; }); };
+
+        async function loadUserTypes() {
+            try {
+                const response = await fetch(`${API_BASE}/usertypes`);
+                const usertypes = await response.json();
+                const tbody = document.getElementById('usertypesList');
+                const noData = document.getElementById('noUserTypes');
+                if (usertypes.length === 0) { tbody.innerHTML = ''; noData.style.display = 'block'; }
+                else {
+                    noData.style.display = 'none';
+                    tbody.innerHTML = usertypes.map(ut => `<tr><td>${ut.id}</td><td><strong>${ut.user_role}</strong></td><td>${new Date(ut.created_at).toLocaleDateString()}</td><td><div class="table-actions"><button class="btn btn-sm btn-primary" onclick="openUpdateUserTypeModal(${ut.id}, '${ut.user_role}')">Edit</button><button class="btn btn-sm btn-danger" onclick="deleteUserType(${ut.id})">Delete</button></div></td></tr>`).join('');
+                }
+                loadUserTypesForUserForm();
+            } catch (error) { console.error('Error:', error); }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/users`);
+                const users = await response.json();
+                const tbody = document.getElementById('usersList');
+                const noData = document.getElementById('noUsers');
+                if (users.length === 0) { tbody.innerHTML = ''; noData.style.display = 'block'; }
+                else {
+                    noData.style.display = 'none';
+                    tbody.innerHTML = users.map(user => `<tr><td>${user.id}</td><td><strong>${user.username}</strong></td><td>${user.email}</td><td>${user.user_role || 'N/A'}</td><td>${new Date(user.created_at).toLocaleDateString()}</td><td><div class="table-actions"><button class="btn btn-sm btn-primary" onclick="openUpdateUserModal(${user.id})">Edit</button><button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button></div></td></tr>`).join('');
+                }
+            } catch (error) { console.error('Error:', error); }
+        }
+
+        async function loadUserTypesForUserForm() {
+            try {
+                const response = await fetch(`${API_BASE}/usertypes`);
+                const usertypes = await response.json();
+                const selects = [document.getElementById('usrUserType'), document.getElementById('updateUsrUserType')];
+                selects.forEach(select => { const currentValue = select.value; select.innerHTML = '<option value="">Select a user type</option>' + usertypes.map(ut => `<option value="${ut.id}">${ut.user_role}</option>`).join(''); select.value = currentValue; });
+            } catch (error) { console.error('Error:', error); }
+        }
+
+        function openUserTypeModal() { document.getElementById('userTypeModal').style.display = 'block'; document.getElementById('typRole').value = ''; document.getElementById('usertypeError').innerHTML = ''; }
+        function closeUserTypeModal() { document.getElementById('userTypeModal').style.display = 'none'; }
+        function openUpdateUserTypeModal(id, role) { document.getElementById('updateTypId').value = id; document.getElementById('updateTypRole').value = role; document.getElementById('updateUserTypeModal').style.display = 'block'; }
+        function closeUpdateUserTypeModal() { document.getElementById('updateUserTypeModal').style.display = 'none'; }
+        function openUserModal() { document.getElementById('userModal').style.display = 'block'; document.getElementById('usrUsername').value = ''; document.getElementById('usrEmail').value = ''; document.getElementById('usrPassword').value = ''; document.getElementById('usrConfirmPassword').value = ''; document.getElementById('usrUserType').value = ''; document.getElementById('userError').innerHTML = ''; document.querySelectorAll('#userModal [data-module][data-action]').forEach(cb => cb.checked = false); }
+        function closeUserModal() { document.getElementById('userModal').style.display = 'none'; }
+        function closeUpdateUserModal() { document.getElementById('updateUserModal').style.display = 'none'; }
+        function showSuccessMessage(message) { const el = document.getElementById('successMessage'); el.textContent = message; el.style.display = 'block'; setTimeout(() => { el.style.display = 'none'; }, 3000); }
+
+        async function createUserType(event) {
+            event.preventDefault();
+            const userRole = document.getElementById('typRole').value.trim();
+            if (!userRole || userRole.length < 3) { alert('User role must be at least 3 characters'); return; }
+            try {
+                const response = await fetch(`${API_BASE}/usertypes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_role: userRole }) });
+                const data = await response.json();
+                if (!response.ok) { document.getElementById('usertypeError').innerHTML = `<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">${data.error}</div>`; return; }
+                showSuccessMessage('User type created successfully!');
+                closeUserTypeModal();
+                loadUserTypes();
+            } catch (error) { alert('Error creating user type'); }
+        }
+
+        async function updateUserType(event) {
+            event.preventDefault();
+            const id = document.getElementById('updateTypId').value;
+            const userRole = document.getElementById('updateTypRole').value.trim();
+            if (!userRole || userRole.length < 3) { alert('User role must be at least 3 characters'); return; }
+            try {
+                const response = await fetch(`${API_BASE}/usertypes/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user_role: userRole }) });
+                const data = await response.json();
+                if (!response.ok) { alert(data.error); return; }
+                showSuccessMessage('User type updated successfully!');
+                closeUpdateUserTypeModal();
+                loadUserTypes();
+            } catch (error) { alert('Error updating user type'); }
+        }
+
+        async function deleteUserType(id) {
+            if (!confirm('Are you sure you want to delete this user type?')) return;
+            try {
+                const response = await fetch(`${API_BASE}/usertypes/${id}`, { method: 'DELETE' });
+                if (response.ok) { showSuccessMessage('User type deleted successfully!'); loadUserTypes(); }
+                else { alert('Error deleting user type'); }
+            } catch (error) { alert('Error deleting user type'); }
+        }
+
+        async function createUser(event) {
+            event.preventDefault();
+            const username = document.getElementById('usrUsername').value.trim();
+            const email = document.getElementById('usrEmail').value.trim();
+            const password = document.getElementById('usrPassword').value;
+            const confirmPassword = document.getElementById('usrConfirmPassword').value;
+            const userTypeId = document.getElementById('usrUserType').value;
+            const errorDiv = document.getElementById('userError');
+            errorDiv.innerHTML = '';
+            if (!username || username.length < 3) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Username must be at least 3 characters</div>'; return; }
+            if (!email || !email.includes('@')) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Please enter a valid email address</div>'; return; }
+            if (!password || password.length < 8) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Password must be at least 8 characters</div>'; return; }
+            if (password !== confirmPassword) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Passwords do not match</div>'; return; }
+            if (!userTypeId) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Please select a user type</div>'; return; }
+            const permissions = {};
+            document.querySelectorAll('#userModal [data-module][data-action]').forEach(checkbox => {
+                if (checkbox.checked) {
+                    const moduleName = checkbox.getAttribute('data-module');
+                    const actionName = checkbox.getAttribute('data-action');
+                    if (!permissions[moduleName]) permissions[moduleName] = {};
+                    permissions[moduleName][actionName] = true;
+                }
+            });
+            try {
+                const response = await fetch(`${API_BASE}/users`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, email, password, confirm_password: confirmPassword, user_type_id: parseInt(userTypeId), permissions }) });
+                const data = await response.json();
+                if (!response.ok) { errorDiv.innerHTML = `<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">${data.error}</div>`; return; }
+                showSuccessMessage('Employee created successfully!');
+                closeUserModal();
+                loadUsers();
+            } catch (error) { alert('Error creating employee'); }
+        }
+
+        async function openUpdateUserModal(userId) {
+            try {
+                const response = await fetch(`${API_BASE}/users/${userId}`);
+                if (!response.ok) { alert('Failed to load user data'); return; }
+                const user = await response.json();
+                document.getElementById('updateUsrId').value = user.id;
+                document.getElementById('updateUsrUsername').value = user.username;
+                document.getElementById('updateUsrEmail').value = user.email;
+                document.getElementById('updateUsrPassword').value = '';
+                document.getElementById('updateUsrUserType').value = user.user_type_id;
+                document.querySelectorAll('#updateUserModal [data-module][data-action]').forEach(cb => cb.checked = false);
+                if (user.permissions) {
+                    for (const [module, actions] of Object.entries(user.permissions)) {
+                        for (const [action, granted] of Object.entries(actions)) {
+                            if (granted) {
+                                const checkbox = document.querySelector(`#updateUserModal [data-module="${module}"][data-action="${action}"]`);
+                                if (checkbox) checkbox.checked = true;
+                            }
+                        }
+                    }
+                }
+                document.getElementById('updateUserModal').style.display = 'block';
+            } catch (error) { alert('Error loading user data'); }
+        }
+
+        async function updateUser(event) {
+            event.preventDefault();
+            const userId = document.getElementById('updateUsrId').value;
+            const username = document.getElementById('updateUsrUsername').value.trim();
+            const email = document.getElementById('updateUsrEmail').value.trim();
+            const password = document.getElementById('updateUsrPassword').value;
+            const userTypeId = document.getElementById('updateUsrUserType').value;
+            const errorDiv = document.getElementById('updateUserError');
+            errorDiv.innerHTML = '';
+            if (!username || username.length < 3) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Username must be at least 3 characters</div>'; return; }
+            if (!email || !email.includes('@')) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Please enter a valid email address</div>'; return; }
+            if (!userTypeId) { errorDiv.innerHTML = '<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">Please select a user type</div>'; return; }
+            const permissions = {};
+            document.querySelectorAll('#updateUserModal [data-module][data-action]').forEach(checkbox => {
+                if (checkbox.checked) {
+                    const moduleName = checkbox.getAttribute('data-module');
+                    const actionName = checkbox.getAttribute('data-action');
+                    if (!permissions[moduleName]) permissions[moduleName] = {};
+                    permissions[moduleName][actionName] = true;
+                }
+            });
+            const payload = { username, email, user_type_id: parseInt(userTypeId), permissions };
+            if (password) payload.password = password;
+            try {
+                const response = await fetch(`${API_BASE}/users/${userId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await response.json();
+                if (!response.ok) { errorDiv.innerHTML = `<div style="background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px;">${data.error}</div>`; return; }
+                showSuccessMessage('Employee updated successfully!');
+                closeUpdateUserModal();
+                loadUsers();
+            } catch (error) { alert('Error updating employee'); }
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this employee?')) return;
+            try {
+                const response = await fetch(`${API_BASE}/users/${userId}`, { method: 'DELETE' });
+                if (response.ok) { showSuccessMessage('Employee deleted successfully!'); loadUsers(); }
+                else { alert('Error deleting employee'); }
+            } catch (error) { alert('Error deleting employee'); }
+        }
+
+        function logout() { localStorage.removeItem('admin_session_token'); localStorage.removeItem('admin_name'); localStorage.removeItem('userRole'); window.location.href = '/'; }
+    </script>
+</body>
+
+</html>
