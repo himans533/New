@@ -14,12 +14,18 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
         body {
             font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
             padding: 20px;
             line-height: 1.6;
+            transition: var(--transition);
         }
 
         .container {
@@ -60,6 +66,13 @@
             align-items: center;
             gap: 20px;
             flex-wrap: wrap;
+        }
+
+        .company-logo {
+            height: 50px;
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
         }
 
         .admin-info {
@@ -131,27 +144,29 @@
         }
 
         .action-card {
-            background: rgba(255, 255, 255, 0.98);
+            background: var(--surface);
             padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            box-shadow: var(--shadow-1);
             text-align: center;
             transition: all 0.3s ease;
+            border: 1px solid var(--border);
         }
 
         .action-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-2);
+            border-color: var(--primary-500);
         }
 
         .action-card h3 {
-            color: #667eea;
+            color: var(--primary-500);
             margin-bottom: 10px;
             font-size: 18px;
         }
 
         .action-card p {
-            color: #718096;
+            color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 15px;
         }
@@ -563,6 +578,7 @@
             .header {
                 flex-direction: column;
                 text-align: center;
+                padding: 15px;
             }
 
             .header-left {
@@ -576,35 +592,507 @@
 
             .dashboard-stats {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 15px;
             }
 
             .modal-content {
-                width: 90%;
+                width: 95%;
+                margin: 5% auto;
             }
 
             .tabs-nav {
                 flex-direction: column;
+                padding: 0 10px;
             }
 
             .tab-button {
                 border-bottom: none;
                 border-left: 3px solid transparent;
                 text-align: left;
+                padding: 12px 20px;
+                font-size: 14px;
             }
 
             .tab-button.active {
                 border-bottom: none;
                 border-left-color: #667eea;
             }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .action-card {
+                padding: 20px;
+            }
+
+            .projects-list {
+                grid-template-columns: 1fr;
+            }
+
+            .project-item {
+                padding: 15px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-member-card {
+                padding: 15px;
+            }
+
+            .permissions-table {
+                overflow-x: auto;
+                padding: 15px;
+            }
+
+            .permissions-actions {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .bulk-actions,
+            .form-actions {
+                justify-content: center;
+            }
+
+            .search-container input {
+                width: 100%;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px;
+                min-height: 70px;
+            }
+
+            .stat-card h3 {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                gap: 10px;
+            }
+
+            .action-card {
+                padding: 15px;
+            }
+
+            .action-card h3 {
+                font-size: 16px;
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+
+            .table th,
+            .table td {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .modal-content {
+                width: 98%;
+                margin: 2% auto;
+                padding: 20px;
+            }
+
+            .modal-header h3 {
+                font-size: 18px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 16px;
+                /* Prevents zoom on iOS */
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-details h3 {
+                font-size: 14px;
+            }
+
+            .user-details p {
+                font-size: 12px;
+            }
+        }
+
+        /* Light mode styling (professional normal text) */
+        .header h1 {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .admin-name {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .admin-role {
+            color: #1a202c !important;
+            font-weight: 400;
+        }
+
+        .tab-button {
+            color: #2d3748 !important;
+            font-weight: 500;
+        }
+
+        .tab-button.active {
+            color: #667eea !important;
+            font-weight: 600;
+        }
+
+        .table th {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .table td {
+            color: #1a202c !important;
+            font-weight: 400;
+        }
+
+        .modal-header h3 {
+            color: #667eea !important;
+            font-weight: 600;
+        }
+
+        .form-group label {
+            color: #000000 !important;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            color: #000000 !important;
+            background: white !important;
+            border-color: #e2e8f0 !important;
+            font-weight: 400;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #718096 !important;
+            font-weight: 400;
+        }
+
+        .project-item h4 {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .project-item p {
+            color: #1a202c !important;
+            font-weight: 400;
+        }
+
+        .deadline-item h5 {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .deadline-item {
+            color: #2d3748 !important;
+            font-weight: 400;
+        }
+
+        .info-item .label {
+            color: #1a202c !important;
+            font-weight: 400;
+        }
+
+        .info-item .value {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        .search-container input {
+            color: #000000 !important;
+            background: white !important;
+            font-weight: 400;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #000000 !important;
+            font-weight: 800 !important;
+        }
+
+        p, span, label, li {
+            color: #1a202c !important;
+            font-weight: 600 !important;
+        }
+
+        /* Dark mode styling for admin dashboard */
+        .dark-theme {
+            background: linear-gradient(135deg, #0a0e27, #1a1f3a);
+            color: #ffffff !important;
+        }
+
+        .dark-theme * {
+            color: #f0f4ff !important;
+            font-weight: 400;
+        }
+
+        .dark-theme h1, .dark-theme h2, .dark-theme h3, .dark-theme h4, .dark-theme h5, .dark-theme h6 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .header {
+            background: rgba(26, 31, 58, 0.95);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .dark-theme .header h1 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .admin-name {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .admin-role {
+            color: #e2e8f0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .dashboard-stats .stat-card {
+            background: rgba(37, 45, 74, 0.9);
+            border-left-color: #8ab4ff;
+        }
+
+        .dark-theme .dashboard-stats .stat-card h3 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .dashboard-stats .stat-card p {
+            color: #e2e8f0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .action-card {
+            background: rgba(26, 31, 58, 0.95);
+        }
+
+        .dark-theme .action-card h3 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .action-card p {
+            color: #e2e8f0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .tab-content {
+            background: rgba(26, 31, 58, 0.95);
+        }
+
+        .dark-theme .table {
+            background: rgba(37, 45, 74, 0.8);
+        }
+
+        .dark-theme .table thead {
+            background: rgba(26, 31, 58, 0.9);
+            border-bottom-color: #3b4563;
+        }
+
+        .dark-theme .table th {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .table td {
+            color: #e2e8f0 !important;
+            font-weight: 400;
+            border-bottom-color: #3b4563;
+        }
+
+        .dark-theme .modal-content {
+            background: rgba(26, 31, 58, 0.98);
+        }
+
+        .dark-theme .modal-header {
+            border-bottom-color: #3b4563;
+        }
+
+        .dark-theme .modal-header h3 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .close {
+            color: #e2e8f0 !important;
+            font-weight: 500;
+        }
+
+        .dark-theme .close:hover {
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+
+        .dark-theme .form-group label {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .form-group input,
+        .dark-theme .form-group select,
+        .dark-theme .form-group textarea {
+            background: rgba(26, 31, 58, 0.8) !important;
+            color: #ffffff !important;
+            border-color: #3b4563 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .form-group input:focus,
+        .dark-theme .form-group select:focus,
+        .dark-theme .form-group textarea:focus {
+            border-color: #8ab4ff !important;
+            box-shadow: 0 0 0 3px rgba(138, 180, 255, 0.15) !important;
+        }
+
+        .dark-theme .form-group input::placeholder,
+        .dark-theme .form-group textarea::placeholder {
+            color: #cbd5e0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .tab-button {
+            color: #cbd5e0 !important;
+            font-weight: 500;
+        }
+
+        .dark-theme .tab-button.active {
+            color: #ffffff !important;
+            font-weight: 600;
+            border-bottom-color: #8ab4ff;
+        }
+
+        .dark-theme .project-item {
+            background: rgba(37, 45, 74, 0.8);
+            border-left-color: #8ab4ff;
+        }
+
+        .dark-theme .project-item h4 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .project-item p {
+            color: #e2e8f0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .deadline-item {
+            background: rgba(37, 45, 74, 0.8);
+            border-left-color: #8ab4ff;
+        }
+
+        .dark-theme .deadline-item:hover {
+            background: rgba(37, 45, 74, 0.95);
+        }
+
+        .dark-theme .deadline-item h5 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .search-container input {
+            background: rgba(26, 31, 58, 0.8) !important;
+            color: #ffffff !important;
+            border-color: #3b4563 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .search-container input::placeholder {
+            color: #cbd5e0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .search-container input:focus {
+            border-color: #8ab4ff !important;
+        }
+
+        .dark-theme .project-detail-card {
+            background: rgba(37, 45, 74, 0.8);
+            border-left-color: #8ab4ff;
+        }
+
+        .dark-theme .project-detail-card h4 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .info-item .label {
+            color: #e2e8f0 !important;
+            font-weight: 400;
+        }
+
+        .dark-theme .info-item .value {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .dark-theme .success-message {
+            background: #48bb78;
+            color: #fff !important;
+            font-weight: 500;
         }
     </style>
+    <!-- Enterprise UI overrides and helpers -->
+    <link rel="stylesheet" href="/static/css/enterprise.css" />
 </head>
 
 <body>
     <div class="container">
         <div class="header">
             <div class="header-left">
-                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                <img src="/static/lg.png" alt="Company Logo" class="company-logo">
+                <h1>Admin Dashboard</h1>
             </div>
             <div class="search-container">
                 <i class="fas fa-search" style="color: #718096;"></i>
@@ -616,6 +1104,7 @@
                     <div class="admin-name" id="adminName">Super Admin</div>
                     <div class="admin-role">Administrator</div>
                 </div>
+                <button id="themeToggleBtn" class="btn btn-sm" aria-label="Toggle theme" title="Toggle theme">🌙</button>
                 <button class="btn btn-danger" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
@@ -686,6 +1175,7 @@
                                 class="fas fa-clipboard-check"></i></div>
                         <h3 id="pendingApprovalsCount">0</h3>
                         <p>Pending Approvals</p>
+
                     </div>
                 </div>
 
@@ -1084,6 +1574,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/ui-enhancements.js"></script>
     <script>
         const API_BASE = window.location.origin + '/api';
 
@@ -1112,10 +1603,39 @@
             loadDashboardOverview();
         }
 
+        function performAdminSearch(event) {
+            if (event.key === 'Enter') {
+                const searchTerm = document.getElementById('adminSearchInput').value.trim();
+                if (searchTerm) {
+                    alert(`Searching for: ${searchTerm}`);
+                    // Implement actual search logic here
+                }
+            }
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskDetailModal').style.display = 'none';
+        }
+
         async function loadDashboardOverview() {
             try {
-                const response = await fetch(`${API_BASE}/admin/dashboard/stats`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` } });
-                if (!response.ok) { console.error('Failed to load dashboard stats'); return; }
+                const token = localStorage.getItem('admin_session_token');
+                if (!token) { window.location.href = '/'; return; }
+                const response = await fetch(`${API_BASE}/admin/dashboard/stats`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('admin_session_token');
+                        window.location.href = '/';
+                    }
+                    console.error('Failed to load dashboard stats');
+                    return;
+                }
                 const stats = await response.json();
                 document.getElementById('activeProjectsCount').textContent = stats.active_projects || 0;
                 document.getElementById('completedTasksCount').textContent = stats.completed_tasks || 0;
@@ -1123,20 +1643,47 @@
                 document.getElementById('overdueTasksCount').textContent = stats.overdue_tasks || 0;
                 document.getElementById('pendingApprovalsCount').textContent = stats.pending_approvals || 0;
 
-                const projectsResponse = await fetch(`${API_BASE}/admin/projects`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` } });
+                const projectsResponse = await fetch(`${API_BASE}/admin/projects`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}`
+                    }
+                });
                 if (projectsResponse.ok) {
                     const projects = await projectsResponse.json();
                     const projectsList = document.getElementById('projectsList');
-                    if (projects.length === 0) { projectsList.innerHTML = '<p style="color: #718096;">No projects created yet</p>'; }
-                    else { projectsList.innerHTML = projects.slice(0, 5).map(project => `<div class="project-item"><h4>${project.title}</h4><p>${project.description || 'No description'} - ${project.progress || 0}% Complete</p><div class="progress"><div class="progress-bar" style="width: ${project.progress || 0}%"></div></div><p style="font-size: 12px; color: #718096;">Created by: ${project.creator_name || 'N/A'} | Team: ${project.team_count} members | Tasks: ${project.task_count}</p></div>`).join(''); }
+                    if (projects.length === 0) {
+                        projectsList.innerHTML = '<p style="color: #718096;">No projects created yet</p>';
+                    } else {
+                        projectsList.innerHTML = projects.slice(0, 5).map(project => `
+                            <div class="project-item">
+                                <h4>${project.title}</h4>
+                                <p>${project.description || 'No description'} - ${project.progress || 0}% Complete</p>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: ${project.progress || 0}%"></div>
+                                </div>
+                                <p style="font-size: 12px; color: #718096;">
+                                    Created by: ${project.creator_name || 'N/A'} | Team: ${project.team_count} members | Tasks: ${project.task_count}
+                                </p>
+                            </div>
+                        `).join('');
+                    }
                 }
 
-                const tasksResponse = await fetch(`${API_BASE}/admin/tasks`, { method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` } });
+                const tasksResponse = await fetch(`${API_BASE}/admin/tasks`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}`
+                    }
+                });
                 if (tasksResponse.ok) {
                     const tasks = await tasksResponse.json();
                     const deadlinesList = document.getElementById('deadlinesList');
-                    if (tasks.length === 0) { deadlinesList.innerHTML = '<p style="color: #718096;">No tasks created yet</p>'; }
-                    else {
+                    if (tasks.length === 0) {
+                        deadlinesList.innerHTML = '<p style="color: #718096;">No tasks created yet</p>';
+                    } else {
                         deadlinesList.innerHTML = tasks.slice(0, 5).map(task => {
                             const dueDate = new Date(task.deadline);
                             const today = new Date();
@@ -1149,21 +1696,244 @@
                             else dueDateStr = `${diffDays} days`;
                             const priorityColor = { 'High': '#ffc107', 'Medium': '#28a745', 'Low': '#6c757d' };
                             const statusColor = { 'Overdue': '#dc3545', 'In Progress': '#ffc107', 'Completed': '#28a745' };
-                            return `<div class="deadline-item" onclick="alert('Task: ${task.title}\\nStatus: ${task.status}\\nAssigned to: ${task.assigned_to_name || 'Unassigned'}')"><h5>${task.title}</h5><p style="margin: 0; font-size: 12px; color: #718096;">Due: ${dueDateStr}</p><p style="margin: 5px 0 0 0; font-size: 11px;"><span style="background: ${priorityColor[task.priority] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 3px;">${task.priority} Priority</span><span style="background: ${statusColor[task.status] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 3px; margin-left: 5px;">${task.status}</span></p></div>`;
+                            return `
+                                <div class="deadline-item" onclick="alert('Task: ${task.title}\\nStatus: ${task.status}\\nAssigned to: ${task.assigned_to_name || 'Unassigned'}')">
+                                    <h5>${task.title}</h5>
+                                    <p style="margin: 0; font-size: 12px; color: #718096;">Due: ${dueDateStr}</p>
+                                    <p style="margin: 5px 0 0 0; font-size: 11px;">
+                                        <span style="background: ${priorityColor[task.priority] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 3px;">${task.priority} Priority</span>
+                                        <span style="background: ${statusColor[task.status] || '#6c757d'}; color: white; padding: 2px 6px; border-radius: 3px; margin-left: 5px;">${task.status}</span>
+                                    </p>
+                                </div>
+                            `;
                         }).join('');
                     }
                 }
-            } catch (error) { console.error('[v0] Error loading dashboard:', error); }
+            } catch (error) {
+                console.error('[v0] Error loading dashboard:', error);
+            }
         }
+        async function showDetailModal(type) {
+            const modal = document.getElementById('taskDetailModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const titles = {
+                'active_projects': 'Active Projects',
+                'completed_tasks': 'Completed Tasks',
+                'active_tasks': 'Active Tasks',
+                'overdue_tasks': 'Overdue Tasks',
+                'pending_approvals': 'Pending Approvals'
+            };
+            modalTitle.textContent = titles[type] || 'Details';
+            modalBody.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+            modal.style.display = 'block';
 
-        function showDetailModal(type) { const modal = document.getElementById('taskDetailModal'); const modalTitle = document.getElementById('modalTitle'); const modalBody = document.getElementById('modalBody'); const titles = { 'active_projects': 'Active Projects', 'completed_tasks': 'Completed Tasks', 'active_tasks': 'Active Tasks', 'overdue_tasks': 'Overdue Tasks', 'pending_approvals': 'Pending Approvals' }; modalTitle.textContent = titles[type] || 'Details'; modalBody.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</div>'; modal.style.display = 'block'; setTimeout(() => { modalBody.innerHTML = '<div class="text-center text-muted"><p>Data will be loaded from database</p></div>'; }, 300); }
+            try {
+                let data = [];
+                let content = '';
+
+                switch (type) {
+                    case 'active_projects':
+                        const projectsResponse = await fetch(`${API_BASE}/admin/projects`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` }
+                        });
+                        if (projectsResponse.ok) {
+                            data = await projectsResponse.json();
+                            content = data.map(project => `
+                                <div class="project-detail-card">
+                                    <h4><i class="fas fa-folder"></i> ${project.title}</h4>
+                                    <p>${project.description || 'No description'}</p>
+                                    <div class="project-info">
+                                        <div class="info-item">
+                                            <span class="label">Creator:</span>
+                                            <span class="value">${project.creator_name || 'N/A'}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">Status:</span>
+                                            <span class="value"><span class="status-badge status-active">${project.status}</span></span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">Team:</span>
+                                            <span class="value">${project.team_count} members</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">Tasks:</span>
+                                            <span class="value">${project.task_count}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">Created:</span>
+                                            <span class="value">${new Date(project.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="label">Deadline:</span>
+                                            <span class="value">${project.deadline ? new Date(project.deadline).toLocaleDateString() : 'No deadline'}</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress-container">
+                                        <p>Progress: ${project.progress || 0}%</p>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: ${project.progress || 0}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('');
+                        }
+                        break;
+
+                    case 'completed_tasks':
+                        const completedTasksResponse = await fetch(`${API_BASE}/admin/tasks`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` }
+                        });
+                        if (completedTasksResponse.ok) {
+                            const allTasks = await completedTasksResponse.json();
+                            data = allTasks.filter(task => task.status === 'Completed');
+                            content = data.map(task => `
+                                <div class="deadline-item">
+                                    <h5><i class="fas fa-check-circle text-success"></i> ${task.title}</h5>
+                                    <p><strong>Project:</strong> ${task.project_name || 'N/A'}</p>
+                                    <p><strong>Assigned to:</strong> ${task.assigned_to_name || 'Unassigned'}</p>
+                                    <p><strong>Completed:</strong> ${new Date(task.created_at).toLocaleDateString()}</p>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                            `).join('');
+                        }
+                        break;
+
+                    case 'active_tasks':
+                        const activeTasksResponse = await fetch(`${API_BASE}/admin/tasks`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` }
+                        });
+                        if (activeTasksResponse.ok) {
+                            const allTasks = await activeTasksResponse.json();
+                            data = allTasks.filter(task => task.status === 'In Progress');
+                            content = data.map(task => `
+                                <div class="deadline-item">
+                                    <h5><i class="fas fa-clock text-warning"></i> ${task.title}</h5>
+                                    <p><strong>Project:</strong> ${task.project_name || 'N/A'}</p>
+                                    <p><strong>Assigned to:</strong> ${task.assigned_to_name || 'Unassigned'}</p>
+                                    <p><strong>Priority:</strong> <span class="badge bg-${task.priority === 'High' ? 'danger' : task.priority === 'Medium' ? 'warning' : 'info'}">${task.priority}</span></p>
+                                    <p><strong>Deadline:</strong> ${task.deadline ? new Date(task.deadline).toLocaleDateString() : 'No deadline'}</p>
+                                    <span class="badge bg-warning">In Progress</span>
+                                </div>
+                            `).join('');
+                        }
+                        break;
+
+                    case 'overdue_tasks':
+                        const overdueTasksResponse = await fetch(`${API_BASE}/admin/tasks`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` }
+                        });
+                        if (overdueTasksResponse.ok) {
+                            const allTasks = await overdueTasksResponse.json();
+                            const today = new Date();
+                            data = allTasks.filter(task => {
+                                if (!task.deadline || task.status === 'Completed') return false;
+                                const deadline = new Date(task.deadline);
+                                return deadline < today;
+                            });
+                            content = data.map(task => `
+                                <div class="deadline-item">
+                                    <h5><i class="fas fa-exclamation-triangle text-danger"></i> ${task.title}</h5>
+                                    <p><strong>Project:</strong> ${task.project_name || 'N/A'}</p>
+                                    <p><strong>Assigned to:</strong> ${task.assigned_to_name || 'Unassigned'}</p>
+                                    <p><strong>Overdue by:</strong> ${Math.ceil((today - new Date(task.deadline)) / (1000 * 60 * 60 * 24))} days</p>
+                                    <p><strong>Priority:</strong> <span class="badge bg-${task.priority === 'High' ? 'danger' : task.priority === 'Medium' ? 'warning' : 'info'}">${task.priority}</span></p>
+                                    <p><strong>Document:</strong> ${task.document_id ? `<a class="btn btn-sm btn-primary" 
+                                     href="${API_BASE}/admin/documents/${task.document_id}/download">
+                                     <i class="fas fa-download"></i> Download
+                                     </a>`
+                                    : 'No document'}
+                                    </p>
+                                    <span class="badge bg-danger">Overdue</span>
+                                </div>
+                            `).join('');
+                        }
+                        break;
+
+                    case 'pending_approvals':
+                        const pendingTasksResponse = await fetch(`${API_BASE}/admin/tasks`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` }
+                        });
+                        if (pendingTasksResponse.ok) {
+                            const allTasks = await pendingTasksResponse.json();
+                            data = allTasks.filter(task => task.approval_status === 'pending');
+                            content = data.map(task => `
+                                <div class="deadline-item">
+                                    <h5><i class="fas fa-clipboard-check text-info"></i> ${task.title}</h5>
+                                    <p><strong>Project:</strong> ${task.project_name || 'N/A'}</p>
+                                    <p><strong>Created by:</strong> ${task.created_by_name || 'N/A'}</p>
+                                    <p><strong>Assigned to:</strong> ${task.assigned_to_name || 'Unassigned'}</p>
+                                    <p><strong>Priority:</strong> <span class="badge bg-${task.priority === 'High' ? 'danger' : task.priority === 'Medium' ? 'warning' : 'info'}">${task.priority}</span></p>
+                                    <span class="badge bg-info">Pending Approval</span>
+                                </div>
+                            `).join('');
+                        }
+                        break;
+                    case 'live_updates':
+                        const docsResponse = await fetch(`${API_BASE}/admin/documents`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('admin_session_token')}` }
+                        });
+
+                        if (docsResponse.ok) {
+                            data = await docsResponse.json();
+
+                            content = data.map(doc => `
+            <div class="deadline-item">
+                <h5><i class="fas fa-file-alt text-primary"></i> ${doc.original_filename}</h5>
+                <p><strong>Project:</strong> ${doc.project_name || 'N/A'}</p>
+                <p><strong>Uploaded by:</strong> ${doc.uploaded_by_name}</p>
+                <p><strong>Uploaded at:</strong> ${new Date(doc.uploaded_at).toLocaleString()}</p>
+
+                <a href="${API_BASE}/admin/documents/${doc.id}/download" 
+                   class="btn btn-sm btn-primary" target="_blank">
+                   <i class="fas fa-download"></i> Download
+                </a>
+            </div>
+                  `).join('');
+                        }
+                        break;
+
+                }
+
+                if (content) {
+                    modalBody.innerHTML = content;
+                } else {
+                    modalBody.innerHTML = '<div class="text-center text-muted"><p>No data available</p></div>';
+                }
+
+            } catch (error) {
+                console.error('Error loading detail data:', error);
+                modalBody.innerHTML = '<div class="text-center text-danger"><p>Error loading data</p></div>';
+            }
+        }
         function hideTaskModal() { document.getElementById('taskDetailModal').style.display = 'none'; }
         window.onclick = function (event) { document.querySelectorAll('.modal').forEach(modal => { if (event.target === modal) modal.style.display = 'none'; }); };
 
         async function loadUserTypes() {
             try {
-                const response = await fetch(`${API_BASE}/usertypes`);
+                const token = localStorage.getItem('admin_session_token');
+                if (!token) { window.location.href = '/'; return; }
+                const response = await fetch(`${API_BASE}/usertypes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('admin_session_token');
+                        window.location.href = '/';
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 const usertypes = await response.json();
+                if (!Array.isArray(usertypes)) {
+                    console.error('Invalid usertypes response:', usertypes);
+                    return;
+                }
                 const tbody = document.getElementById('usertypesList');
                 const noData = document.getElementById('noUserTypes');
                 if (usertypes.length === 0) { tbody.innerHTML = ''; noData.style.display = 'block'; }
@@ -1171,14 +1941,29 @@
                     noData.style.display = 'none';
                     tbody.innerHTML = usertypes.map(ut => `<tr><td>${ut.id}</td><td><strong>${ut.user_role}</strong></td><td>${new Date(ut.created_at).toLocaleDateString()}</td><td><div class="table-actions"><button class="btn btn-sm btn-primary" onclick="openUpdateUserTypeModal(${ut.id}, '${ut.user_role}')">Edit</button><button class="btn btn-sm btn-danger" onclick="deleteUserType(${ut.id})">Delete</button></div></td></tr>`).join('');
                 }
-                loadUserTypesForUserForm();
+                loadUserTypesForUserForm(usertypes);
             } catch (error) { console.error('Error:', error); }
         }
 
         async function loadUsers() {
             try {
-                const response = await fetch(`${API_BASE}/users`);
+                const token = localStorage.getItem('admin_session_token');
+                if (!token) { window.location.href = '/'; return; }
+                const response = await fetch(`${API_BASE}/users`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('admin_session_token');
+                        window.location.href = '/';
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 const users = await response.json();
+                if (!Array.isArray(users)) {
+                    console.error('Invalid users response:', users);
+                    return;
+                }
                 const tbody = document.getElementById('usersList');
                 const noData = document.getElementById('noUsers');
                 if (users.length === 0) { tbody.innerHTML = ''; noData.style.display = 'block'; }
@@ -1189,13 +1974,10 @@
             } catch (error) { console.error('Error:', error); }
         }
 
-        async function loadUserTypesForUserForm() {
-            try {
-                const response = await fetch(`${API_BASE}/usertypes`);
-                const usertypes = await response.json();
-                const selects = [document.getElementById('usrUserType'), document.getElementById('updateUsrUserType')];
-                selects.forEach(select => { const currentValue = select.value; select.innerHTML = '<option value="">Select a user type</option>' + usertypes.map(ut => `<option value="${ut.id}">${ut.user_role}</option>`).join(''); select.value = currentValue; });
-            } catch (error) { console.error('Error:', error); }
+        async function loadUserTypesForUserForm(usertypes) {
+            if (!Array.isArray(usertypes)) return;
+            const selects = [document.getElementById('usrUserType'), document.getElementById('updateUsrUserType')];
+            selects.forEach(select => { const currentValue = select.value; select.innerHTML = '<option value="">Select a user type</option>' + usertypes.map(ut => `<option value="${ut.id}">${ut.user_role}</option>`).join(''); select.value = currentValue; });
         }
 
         function openUserTypeModal() { document.getElementById('userTypeModal').style.display = 'block'; document.getElementById('typRole').value = ''; document.getElementById('usertypeError').innerHTML = ''; }
@@ -1347,6 +2129,8 @@
 
         function logout() { localStorage.removeItem('admin_session_token'); localStorage.removeItem('admin_name'); localStorage.removeItem('userRole'); window.location.href = '/'; }
     </script>
+    <script src="/static/js/ui-enhancements.js"></script>
+    <button id="themeToggleBtn" class="theme-toggle" aria-label="Toggle theme" title="Toggle between light and dark mode">🌙</button>
 </body>
 
 </html>
